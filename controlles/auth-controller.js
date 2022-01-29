@@ -51,8 +51,10 @@ module.exports = {
                 ...tokenPair,
                 user_id: user._id
             });
+           // console.log(tokenPair.refresh_token);
+            res.cookie('refresh_token', tokenPair.refresh_token, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
 
-            res.json({
+            return res.json({
                 user: user,
                 ...tokenPair
             });
@@ -72,7 +74,8 @@ module.exports = {
             //
             // const tokenData = await tokenModel.deleteOne({refreshToken})
             // return tokenData
-            console.log('Token');
+
+            //const {refreshToken}=req.coockies;
             const token = req.headers.authorization.split(' ')[1];
             //const token = req.get("Authorization");
             if (!token) {
@@ -80,7 +83,7 @@ module.exports = {
             }
 
             const tokenData = await OAuth.deleteOne({access_token: token})
-            console.log('Token deleted');
+
             return res.json(tokenData)
         } catch (e) {
             next(e);
@@ -89,26 +92,72 @@ module.exports = {
     auth: async (req, res, next) => {
         try {
             const user = await UserDB.findOne(req.user._id)
-console.log(req.token);
-
+//console.log(req.tokenPara); //refresh
+            if(!user) {
+                return res.status(408).json({message: 'Пользователь NO авторизирован'})
+            }
             // await OAuth.updateOne({user_id: user._id}, {access_token: req.token});
             //
-            // res.json({
-            //     user: user,
-            //     ...req.token
-            // });
 
-            const tokenPair = jwtServise.generateTokenPair();
-            await OAuth.create({
-                ...tokenPair,
-                user_id: user._id
-            });
+                        const tokenPair =  jwtServise.generateTokenPair();
+
+//             const p = await OAuth.updateOne({ refresh_token: req.tokenPara }, { ...tokenPair });
+// console.log('3', p);
+
 
             res.json({
                 user: user,
-                ...tokenPair
+                access_token: req.token,
+                //...tokenPair
             });
+
+            // const tokenPair = jwtServise.generateTokenPair();
+            // await OAuth.create({
+            //     ...tokenPair,
+            //     user_id: user._id
+            // });
+
+            // res.json({
+            //     user: user,
+            //     ...tokenPair
+            // });
             //res.json(user);
+        } catch (e) {
+            next(e);
+        }
+    },
+    refresh: async (req, res, next) => {
+        try {
+             const {refresh_token} = req.cookies;
+
+
+            if (!refresh_token) {
+                return res.status(401).json({message: 'Токина нет!'})
+            }
+            const decoder = await jwtServise.verifyToken(refresh_token, 'refresh');
+
+            const tokenRespons = await OAuth.findOne({ refresh_token: refresh_token }).populate('user_id');
+            console.log(tokenRespons);
+
+            if (!decoder || !tokenRespons) {
+                return res.status(401).json({message: 'Токина нет в БД!'})
+            }
+            const tokenPair = jwtServise.generateTokenPair();
+
+            await OAuth.updateOne({ refresh_token: refresh_token },
+                {access_token: tokenPair.access_token,
+                        refresh_token: tokenPair.refresh_token});
+
+            //const qq = await OAuth.updateOne({ user_id: decoder.id }, { ...tokenPair });
+
+            const user = tokenRespons.user_id;
+
+
+             res.cookie('refresh_token', tokenPair.refresh_token, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+
+            res.json( {tokenPair, user});
+
+
         } catch (e) {
             next(e);
         }

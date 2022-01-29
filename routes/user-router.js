@@ -1,9 +1,11 @@
 const router = require('express').Router();
 
 const { userConttoller } = require('../controlles');
-const { userMiddleware } = require('../middleware');
+const { userMiddleware, authMiddleware } = require('../middleware');
 
-router.get('/', userConttoller.getAllUsers);
+router.get('/',
+    authMiddleware. checkAccessToken,
+    userConttoller.getAllUsers);
 
 router.get('/:user_id',
     userConttoller.getSingleUsers);
@@ -18,7 +20,7 @@ router.post('/',
 
 router.patch('/',
     //userMiddleware.validateUserBody,
-    userMiddleware.isEmptyFields,
+    //userMiddleware.isEmptyFields,
     userMiddleware.isUserPresent,
     userMiddleware.checkUniqueEmail,
     userMiddleware.checkPassword,

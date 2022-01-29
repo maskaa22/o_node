@@ -9,6 +9,7 @@ module.exports = {
 
             res.json(users);
         } catch (e) {
+            console.log(e);
             next(e);
         }
     },

@@ -15,12 +15,14 @@ router.post('/login',
     authMiddleware.isUserPasswordPresent,
     authController.login);
 
-router.get('/auth',
-    authMiddleware.decoderToken,
-    authController.auth);
+// router.get('/auth',
+//     authMiddleware. checkAccessToken,
+//     authController.auth);
 
 router.get('/logout',
 
     authController.logout);
+
+router.get('/refresh', authController.refresh);
 
 module.exports = router;

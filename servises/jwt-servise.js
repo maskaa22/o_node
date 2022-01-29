@@ -11,7 +11,7 @@ const {
 module.exports = {
     generateTokenPair: (id) => {
         // const access_token = jwt.sign({id}, JWT_ACCESS_SECRET, { expiresIn: '15m' });
-        const access_token = jwt.sign({id}, JWT_ACCESS_SECRET, { expiresIn: '30s' });
+        const access_token = jwt.sign({id}, JWT_ACCESS_SECRET, { expiresIn: '15m' });
         const refresh_token = jwt.sign({id}, JWT_REFRESH_SECRET, { expiresIn: '30d' });
 
         return {
@@ -21,13 +21,16 @@ module.exports = {
     },
     verifyToken: async (token, tokenType = ACCESS) => {
         try {
+
             const secret = tokenType === ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
 
             const decoder = await jwt.verify(token, secret);
 
             return {decoder}
         } catch (e) {
-            throw new Error("Not TOKIN", 400);
+            //throw new Error("Token ymer", 400);
+
+            return null;
         }
     },
     // removeToken: async (token)
