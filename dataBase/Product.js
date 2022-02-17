@@ -1,28 +1,31 @@
 const { Schema, model } = require('mongoose');
 
-
-
 const userSchema = new Schema({
-    name: {
+    product_name: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
-    email: {
+    title: {
         type: String,
-        required: true,
-        trim: true,
-        unique: true
+        required: true
     },
-    password: {
+    price: {
         type: String,
+        required: true
+    },
+    // category: {
+    //     type: String,
+    //     required: true
+    // },
+    // image: {
+    //     type: String,
+    //     required: true
+    // }
+    category_id: {
+        type: Schema.Types.ObjectId,
         required: true,
-        trim: true,
-        select: false
+        ref: 'category'
     }
-
 }, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
-
-
 
 module.exports = model('product', userSchema);

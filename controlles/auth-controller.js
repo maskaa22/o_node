@@ -137,7 +137,7 @@ module.exports = {
             const decoder = await jwtServise.verifyToken(refresh_token, 'refresh');
 
             const tokenRespons = await OAuth.findOne({ refresh_token: refresh_token }).populate('user_id');
-            console.log(tokenRespons);
+
 
             if (!decoder || !tokenRespons) {
                 return res.status(401).json({message: 'Токина нет в БД!'})

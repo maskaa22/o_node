@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-const { userRouter, authRouter } = require('./routes');
+const { userRouter, authRouter, productRouter, categoryRouter } = require('./routes');
 const {
     variablesConfig: { PORT, MONGO_CONNECT_URL }, messageCode
 } = require('./config');
@@ -19,7 +19,8 @@ app.use(express.json({ extended: true }));
 app.use(cookieParser());
 
 app.use('/users', userRouter);
-app.use('/auth', authRouter)
+app.use('/products', productRouter);
+app.use('/category', categoryRouter);
 
 app.listen(PORT, () => {
     console.log(messageCode.RUNNING, PORT);
