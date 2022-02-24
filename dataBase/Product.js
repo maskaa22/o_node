@@ -1,6 +1,8 @@
+const mongoosePagination = require('mongoose-paginate');
+
 const { Schema, model } = require('mongoose');
 
-const userSchema = new Schema({
+const productSchema = new Schema({
     product_name: {
         type: String,
         required: true
@@ -13,10 +15,6 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    // category: {
-    //     type: String,
-    //     required: true
-    // },
     // image: {
     //     type: String,
     //     required: true
@@ -28,4 +26,8 @@ const userSchema = new Schema({
     }
 }, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
 
-module.exports = model('product', userSchema);
+productSchema.plugin(mongoosePagination);
+
+module.exports = model('product', productSchema);
+
+

@@ -19,6 +19,7 @@ app.use(express.json({ extended: true }));
 app.use(cookieParser());
 
 app.use('/users', userRouter);
+app.use('/auth', authRouter);
 app.use('/products', productRouter);
 app.use('/category', categoryRouter);
 

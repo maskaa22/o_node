@@ -1,10 +1,10 @@
-const {ProductDB, CategoryDB} = require("../dataBase");
 
+ const {ProductDB} = require("../dataBase");
 
 module.exports = {
     createProduct: async (req, res, next) => {
         try {
-            const {product_name, title, price, category_id} = req.body;
+            const {product_name, title, price} = req.body;
 
             if(product_name==='' || title==='' || price===''){
                 return res.status(402).json({
@@ -12,17 +12,13 @@ module.exports = {
                 })
             }
 
-             const product = await ProductDB.create(req.body)
-            // const product = await ProductDB.create({
-            //     ...req.body,
-            //     category_id:category_id
-            // })
+             const product = await ProductDB.create(req.body);
+
             if (!product) {
                 return res.status(400).json({
                     message: "Проверьте данные"
                 })
             }
-
 
             res.json(product);
         } catch (e) {
@@ -31,7 +27,19 @@ module.exports = {
     },
     allProduct: async (req, res, next) => {
         try {
-            const products = await ProductDB.find();
+
+            const { page, limit } = req.query;
+
+            const options = {
+                page: parseInt(page, 10) || 1,
+                limit: parseInt(limit, 5) || 5,
+            };
+
+            const products = await ProductDB.paginate({}, options);
+
+             // const products = await ProductDB.paginate({}, {limit});
+
+            // const products = await ProductDB.find().limit(limit);
 
             res.json(products);
         } catch (e) {

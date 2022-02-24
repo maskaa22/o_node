@@ -10,7 +10,6 @@ const {
 
 module.exports = {
     generateTokenPair: (id) => {
-        // const access_token = jwt.sign({id}, JWT_ACCESS_SECRET, { expiresIn: '15m' });
         const access_token = jwt.sign({id}, JWT_ACCESS_SECRET, { expiresIn: '15m' });
         const refresh_token = jwt.sign({id}, JWT_REFRESH_SECRET, { expiresIn: '30d' });
 
@@ -28,10 +27,7 @@ module.exports = {
 
             return {decoder}
         } catch (e) {
-            //throw new Error("Token ymer", 400);
-
             return null;
         }
-    },
-    // removeToken: async (token)
+    }
 };

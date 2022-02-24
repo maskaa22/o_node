@@ -10,14 +10,6 @@ router.get('/',
 router.get('/:user_id',
     userConttoller.getSingleUsers);
 
-router.post('/',
-    //userMiddleware.validateUserBody,
-    //userMiddleware.isEmptyFields,
-    userMiddleware.checkUniqueEmail,
-    userMiddleware.checkUniqueUsername,
-    //userMiddleware.checkPassword,
-    userConttoller.createUser);
-
 router.patch('/',
     //userMiddleware.validateUserBody,
     //userMiddleware.isEmptyFields,

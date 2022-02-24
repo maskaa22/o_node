@@ -39,8 +39,26 @@ module.exports = {
     filtreCategory: async (req, res, next) => {
         try {
             const filter = req.body;
+            // let {limit, page} =req.query;
+            // console.log(li);
+            
+            // page = page || 1;
+            // limit = limit || 9;
+            // let offset = page * limit - limit;
 
-             const products = await ProductDB.find({"category_id": {_id: mongoose.Types.ObjectId(filter.checkCategory)}});
+            const { page, limit } = req.query;
+console.log(page, limit);
+            const options = {
+                page: parseInt(page, 10) || 1,
+                limit: parseInt(limit, 5) || 5,
+            };
+            
+
+            const products = await ProductDB.paginate({"category_id": {
+                    _id: mongoose.Types.ObjectId(filter.checkCategory)}}, options);
+            
+             // const products = await ProductDB.find({"category_id": {
+             //     _id: mongoose.Types.ObjectId(filter.checkCategory)}});
 
             res.json(products);
         } catch (e) {

@@ -1,5 +1,5 @@
 const { UserDB } = require('../dataBase');
-const { userUtil: { userNormalizator } } = require('../utils');
+// const { userUtil: { userNormalizator } } = require('../utils');
 const {statusCode, messageCode} = require("../config");
 
 module.exports = {
@@ -20,24 +20,6 @@ module.exports = {
             const users = await UserDB.findById(user_id);
 
             res.json(users);
-        } catch (e) {
-            next(e);
-        }
-    },
-    createUser: async (req, res, next) => {
-        try {
-
-             const createdUser = await UserDB.createUserWithHashPassword(req.body);
-
-             const userToReturn = userNormalizator(createdUser);
-
-            if(createdUser){
-                return res.status(statusCode.OK).json({
-                    message: messageCode.CREATED
-                })
-            }
-
-         res.json(userToReturn);
         } catch (e) {
             next(e);
         }
