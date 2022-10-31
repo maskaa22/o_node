@@ -1,3 +1,4 @@
 module.exports = {
-    userUtil: require('./user.util')
+    userUtil: require('./user.util'),
+    userDto: require('./UserDto')
 };

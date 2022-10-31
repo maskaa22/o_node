@@ -1,5 +1,5 @@
 const {passwordServise, jwtServise} = require("../servises");
-const {UserDB} = require("../dataBase");
+const {UserDB, OAuth} = require("../dataBase");
 const {statusCode, messageCode} = require("../config");
 
 module.exports = {
@@ -7,12 +7,18 @@ module.exports = {
         try {
             const { email } = req.body;
 
+            if(!email) {
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.FILL_FIELDS
+                })
+            }
+
             const userByEmail = await UserDB.findOne({ email }).select('+password').lean();
 
 
             if (!userByEmail) {
-                return res.status(400).json({
-                    message: "Такого пользователя не существует"
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.CONFLICT_EMAIL
                 })
             }
 
@@ -26,11 +32,18 @@ module.exports = {
     isUserEmailNotPresent: async (req, res, next) => {
         try {
             const { email } = req.body;
+
+            if(!email) {
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.FILL_FIELDS
+                })
+            }
+
             const userByEmail = await UserDB.findOne({ email }).select('+password').lean();
 
             if (userByEmail) {
-                return res.status(400).json({
-                    message: "Такой пользователь существует"
+                return res.status(statusCode.BAD_REQUEST).json({
+                    message: messageCode.THIS_USER_ALREADY_EXISTS
                 })
             }
 
@@ -44,6 +57,13 @@ module.exports = {
     isUserPasswordPresent: async (req, res, next) => {
         try {
             const { password } = req.body;
+
+            if(!password) {
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.FILL_FIELDS
+                })
+            }
+
             const { password: hashPassword } = req.user;
 
             await passwordServise.compare(password, hashPassword);
@@ -58,17 +78,37 @@ module.exports = {
             const token = req.headers.authorization.split(' ')[1];
 
             if (!token) {
-                return res.status(401).json({message: 'Пользователь не авторизирован'})
+                return res.status(statusCode.UNAUTHORIZED).json({message: messageCode.NOT_FOUND})
             }
 
             const decoder = await jwtServise.verifyToken(token);
 
             if(!decoder) {
-                return res.status(401).json({message: 'Пользователь не !!!! авторизирован'})
+                return res.status(statusCode.NOT_FOUND).json({message: messageCode.NOT_FOUND})
             }
 
             req.user = decoder
             req.token=token
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+    delOldToken: async (req, res, next) => {
+        try {
+
+            const date = new Date();
+
+            const oldDate = new Date(date.getFullYear(), date.getMonth()-2, 1);
+
+            const find = await OAuth.find();
+
+              find.map(async date => {
+                  if (date.createdAt < oldDate) {
+                      await OAuth.deleteOne({createdAt: date.createdAt})
+                  }
+              })
 
             next();
         } catch (e) {

@@ -6,7 +6,7 @@ const passwordServise = require('../servises/password-servise');
 const userSchema = new Schema({
     name: {
         type: String,
-        required: true,
+        // required: true,
         trim: true
     },
     email: {
@@ -17,15 +17,40 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
+       // required: true,
         trim: true,
-        select: false
+        select: true
     },
     role: {
         type: String,
         default: userRolesEnumConfig.USER,
         enum: Object.values(userRolesEnumConfig)
-    }
+    },
+    phone: {
+        type: String,
+        // required: true,
+        trim: true
+    },
+    foto: {
+        type: String,
+        // required: true,
+        trim: true
+    },
+    surname: {
+        type: String,
+        // required: true,
+        trim: true
+    },
+    nameSity: {
+        type: String,
+        // required: true,
+        trim: true
+    },
+    nameDepartment: {
+        type: String,
+        // required: true,
+        trim: true
+    },
 }, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
 
 userSchema.statics = {

@@ -5,13 +5,13 @@ const {
         JWT_ACCESS_SECRET,
         JWT_REFRESH_SECRET
     },
-    tokenTypeEnum: { ACCESS }
+    tokenTypeEnum: {ACCESS}
 } = require('../config');
 
 module.exports = {
     generateTokenPair: (id) => {
-        const access_token = jwt.sign({id}, JWT_ACCESS_SECRET, { expiresIn: '15m' });
-        const refresh_token = jwt.sign({id}, JWT_REFRESH_SECRET, { expiresIn: '30d' });
+        const access_token = jwt.sign({id}, JWT_ACCESS_SECRET, {expiresIn: '15m'});
+        const refresh_token = jwt.sign({id}, JWT_REFRESH_SECRET, {expiresIn: '30d'});
 
         return {
             access_token,

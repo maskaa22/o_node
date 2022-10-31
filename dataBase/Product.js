@@ -23,6 +23,19 @@ const productSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'category'
+    },
+    count: {
+        type: String,
+        required: true
+    },
+    totalPrice: {
+        type: String,
+        required: true
+    },
+    inventoryNumber: {
+        type: String,
+        required: true,
+        unique: true
     }
 }, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
 

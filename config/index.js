@@ -3,5 +3,6 @@ module.exports = {
     userRolesEnumConfig: require('./user-roles-enum'),
     messageCode: require('./message-code'),
     statusCode: require('./status-code'),
-    tokenTypeEnum: require('./token-type.enum')
+    tokenTypeEnum: require('./token-type.enum'),
+    constantsConfig: require('./constants')
 };
