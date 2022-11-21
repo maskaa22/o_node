@@ -3,5 +3,6 @@ module.exports = {
     authRouter: require('./auth-router'),
     productRouter: require('./product-router'),
     categoryRouter: require('./category-router'),
-    paymentRouter: require('./payment-router')
+    paymentRouter: require('./payment-router'),
+    homeRouter: require('./home-router')
 };

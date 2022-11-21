@@ -5,5 +5,7 @@ module.exports = {
     CategoryDB: require('./Category'),
     OrderDB: require('./Order'),
     AnalyzeDB: require('./Analyze_order'),
-    ArchiveDB: require('./Archive')
+    ArchiveDB: require('./Archive'),
+    CalendarDB: require('./Calendar'),
+    TimeDB: require('./Time')
 };

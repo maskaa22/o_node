@@ -25,5 +25,6 @@ module.exports = {
     ORDER_BY_USER: '/:user_id/orders',
     CONTACT: '/contact',
     ADRESS: '/adress',
-    SEND: '/send'
+    SEND: '/send',
+    FIND: '/find',
 }

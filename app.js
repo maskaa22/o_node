@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-const { userRouter, authRouter, productRouter, categoryRouter, paymentRouter } = require('./routes');
+const { userRouter, authRouter, productRouter, categoryRouter, paymentRouter, homeRouter } = require('./routes');
 const {
     variablesConfig: { PORT, MONGO_CONNECT_URL }, messageCode
 } = require('./config');
@@ -25,6 +25,7 @@ app.use('/products', productRouter);
 app.use('/category', categoryRouter);
 // app.use('/payment', paymentRouter);
 app.use('/create-checkout-session', paymentRouter);
+app.use('/home', homeRouter);
 
 
 
