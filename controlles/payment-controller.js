@@ -23,7 +23,7 @@ module.exports = {
                     },
                     quantity: item.count,
                 }
-            })
+            });
 
             const session = await stripe.checkout.sessions.create({
                 line_items,
@@ -32,9 +32,7 @@ module.exports = {
                 cancel_url: CANCEL_URL,
             });
 
-            // res.redirect(303, session.url);
             res.json(session);
-
         } catch (e) {
             next(e);
         }

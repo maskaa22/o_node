@@ -1,5 +1,5 @@
 module.exports = {
-    passwordServise: require('./password-servise'),
+    emailServise: require('./email-servise'),
     jwtServise: require('./jwt-servise'),
-    emailServise: require('./email-servise')
+    passwordServise: require('./password-servise'),
 };

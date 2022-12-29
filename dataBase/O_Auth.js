@@ -1,4 +1,7 @@
-const { Schema, model } = require('mongoose');
+const {Schema, model} = require('mongoose');
+
+const {O_AUTH} = require("../config/constants");
+const {USER} = require("../config/user-roles-enum");
 
 const oAuthSchema = new Schema({
     access_token: {
@@ -14,8 +17,8 @@ const oAuthSchema = new Schema({
     user_id: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'user'
+        ref: USER
     }
-}, { timestamps: true });
+}, {timestamps: true});
 
-module.exports = model('o_auth', oAuthSchema);
+module.exports = model(O_AUTH, oAuthSchema);

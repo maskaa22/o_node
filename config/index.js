@@ -1,8 +1,8 @@
 module.exports = {
-    variablesConfig: require('./variables'),
-    userRolesEnumConfig: require('./user-roles-enum'),
+    constantsConfig: require('./constants'),
     messageCode: require('./message-code'),
     statusCode: require('./status-code'),
     tokenTypeEnum: require('./token-type.enum'),
-    constantsConfig: require('./constants')
+    userRolesEnumConfig: require('./user-roles-enum'),
+    variablesConfig: require('./variables'),
 };

@@ -1,4 +1,6 @@
-const { Schema, model } = require('mongoose');
+const {Schema, model} = require('mongoose');
+
+const {CALENDAR} = require("../config/constants");
 
 const orderSchema = new Schema({
     title: {
@@ -7,12 +9,12 @@ const orderSchema = new Schema({
     date: {
         type: String,
     },
-    description:{
+    description: {
         type: String,
     },
-    time:{
+    time: {
         type: String,
     }
-}, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
+}, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 
-module.exports = model('calendar', orderSchema);
+module.exports = model(CALENDAR, orderSchema);

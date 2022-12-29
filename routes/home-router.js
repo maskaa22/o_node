@@ -1,15 +1,15 @@
 const router = require('express').Router();
 
-const { homeController } = require('../controlles');
 const {constantsConfig} = require("../config");
-
-router.post(constantsConfig.THIS,
-    homeController.createCalendarEvent);
+const {homeController} = require('../controlles');
 
 router.get(constantsConfig.THIS,
     homeController.getCalendarEvent);
 
 router.get(constantsConfig.FIND,
     homeController.getFindEvent);
+
+router.post(constantsConfig.THIS,
+    homeController.createCalendarEvent);
 
 module.exports = router;

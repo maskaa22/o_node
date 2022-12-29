@@ -1,19 +1,17 @@
-const { UserDB } = require('../dataBase');
-const { statusCode, messageCode } = require('../config');
-const passwordServise = require("../servises/password-servise");
+const {statusCode, messageCode} = require('../config');
+const {UserDB} = require('../dataBase');
 
 module.exports = {
     isUserPresent: async (req, res, next) => {
         try {
-            const { user_id } = req.body;
+            const {user_id} = req.body;
 
-            const user = await UserDB.findById({ _id: user_id });
+            const user = await UserDB.findById({_id: user_id});
 
             if (!user) {
-
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.NOT_FOUND
-                })
+                });
             }
 
             req.user = user;
@@ -23,24 +21,6 @@ module.exports = {
             next(e);
         }
     },
-    // checkUniqueEmail: async (req, res, next) => {
-    //     try {
-    //         const { email } = req.body;
-    //
-    //         const userByEmail = await UserDB.findOne({ email });
-    //
-    //         if (userByEmail) {
-    //             return res.status(statusCode.CONFLICT).json({
-    //                 message: messageCode.CONFLICT_EMAIL
-    //             })
-    //         }
-    //
-    //         next();
-    //     } catch (e) {
-    //         next(e);
-    //     }
-    // },
-    //
     // updatePassword: async (req, res, next) => {
     //     try {
     //         const { _id, number, numberToo } = req.body;
@@ -55,14 +35,30 @@ module.exports = {
     //         next(e);
     //     }
     // },
+    checkPassword: async (req, res, next) => {
+        try {
+            const {password, pereatPassword} = req.body;
+
+            if (password !== pereatPassword) {
+
+                return res.status(statusCode.CONFLICT).json({
+                    message: messageCode.INCORRECT_PASSWORD
+                });
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
     checkContactData: async (req, res, next) => {
         try {
-            const { name, surname, phone } = req.body;
+            const {name, surname, phone} = req.body;
 
-            if(name==='' && surname==='' && phone==='') {
+            if (name === '' && surname === '' && phone === '') {
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.FILL_FIELDS
-                })
+                });
             }
 
             next();
@@ -72,12 +68,12 @@ module.exports = {
     },
     checkAdressData: async (req, res, next) => {
         try {
-            const { nameSity, nameDepartment } = req.body;
+            const {nameSity, nameDepartment} = req.body;
 
-            if(nameSity==='' && nameDepartment==='') {
+            if (nameSity === '' && nameDepartment === '') {
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.FILL_FIELDS
-                })
+                });
             }
 
             next();
@@ -87,14 +83,13 @@ module.exports = {
     },
     checkAllData: async (req, res, next) => {
         try {
-            const { name, surname, email, phone, oldPassword, number, numberToo,  nameSity, nameDepartment} = req.body;
+            const {name, surname, email, phone, oldPassword, number, numberToo, nameSity, nameDepartment} = req.body;
 
-            if(name==='' && surname==='' && email==='' && phone==='' && oldPassword==='' && number===''
-                && numberToo===''&& ((nameSity===undefined && nameDepartment===undefined) || (nameSity==='' && nameDepartment==='')))
-            {
+            if (name === '' && surname === '' && email === '' && phone === '' && oldPassword === '' && number === ''
+                && numberToo === '' && ((nameSity === undefined && nameDepartment === undefined) || (nameSity === '' && nameDepartment === ''))) {
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.FILL_FIELDS
-                })
+                });
             }
 
             next();
@@ -104,15 +99,15 @@ module.exports = {
     },
     updateContactDataMiddleware: async (req, res, next) => {
         try {
-            const { _id, name, surname, phone} = req.body;
+            const {_id, name, surname, phone} = req.body;
 
-            if(name!=='') {
+            if (name !== '') {
                 await UserDB.updateOne({_id}, {name: name});
             }
-            if(surname!=='') {
+            if (surname !== '') {
                 await UserDB.updateOne({_id}, {surname: surname});
             }
-            if(phone!=='') {
+            if (phone !== '') {
                 await UserDB.updateOne({_id}, {phone: phone});
             }
 
@@ -123,12 +118,12 @@ module.exports = {
     },
     updateAdressDataMiddleware: async (req, res, next) => {
         try {
-            const { _id, nameSity, nameDepartment} = req.body;
+            const {_id, nameSity, nameDepartment} = req.body;
 
-            if(nameSity!=='') {
+            if (nameSity !== '') {
                 await UserDB.updateOne({_id}, {nameSity: nameSity});
             }
-            if(nameDepartment!=='') {
+            if (nameDepartment !== '') {
                 await UserDB.updateOne({_id}, {nameDepartment: nameDepartment});
             }
 

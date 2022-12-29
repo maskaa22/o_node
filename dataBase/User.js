@@ -1,12 +1,12 @@
-const { Schema, model } = require('mongoose');
+const {Schema, model} = require('mongoose');
 
-const { userRolesEnumConfig } = require('../config');
 const passwordServise = require('../servises/password-servise');
+const {USER} = require("../config/user-roles-enum");
+const {userRolesEnumConfig} = require('../config');
 
 const userSchema = new Schema({
     name: {
         type: String,
-        // required: true,
         trim: true
     },
     email: {
@@ -17,7 +17,6 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-       // required: true,
         trim: true,
         select: true
     },
@@ -28,42 +27,37 @@ const userSchema = new Schema({
     },
     phone: {
         type: String,
-        // required: true,
         trim: true
     },
     foto: {
         type: String,
-        // required: true,
         trim: true
     },
     surname: {
         type: String,
-        // required: true,
         trim: true
     },
     nameSity: {
         type: String,
-        // required: true,
         trim: true
     },
     nameDepartment: {
         type: String,
-        // required: true,
         trim: true
     },
-}, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
+}, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 
 userSchema.statics = {
     async createUserWithHashPassword(userObject) {
         const hashedPassword = await passwordServise.hash(userObject.password);
 
-        return this.create({ ...userObject, password: hashedPassword });
+        return this.create({...userObject, password: hashedPassword});
     },
     async updateUserWithHashPassword(userObject, newUser) {
         const hashedPassword = await passwordServise.hash(newUser.password);
 
-        return this.updateOne({ ...userObject}, {...newUser, password: hashedPassword });
+        return this.updateOne({...userObject}, {...newUser, password: hashedPassword});
     }
 };
 
-module.exports = model('user', userSchema);
+module.exports = model(USER, userSchema);

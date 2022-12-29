@@ -1,8 +1,8 @@
 const router = require('express').Router();
 
+const {contactController} = require('../controlles');
 const {constantsConfig} = require("../config");
-const {paymentController} = require("../controlles");
 
-router.post(constantsConfig.THIS, paymentController.payment);
+router.post(constantsConfig.THIS, contactController.sendEmail);
 
 module.exports = router;

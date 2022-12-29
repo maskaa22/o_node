@@ -1,9 +1,4 @@
 const {CalendarDB, TimeDB} = require("../dataBase");
-const {statusCode, messageCode, constantsConfig} = require("../config");
-const {userNormalizator, userNormalizatorForAuth,} = require("../utils/user.util");
-const {validationResult} = require("express-validator");
-const {jwtServise} = require("../servises");
-const UserDto = require("../utils/UserDto");
 
 module.exports = {
     createCalendarEvent: async (req, res, next) => {
@@ -15,7 +10,6 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-        // req.body
     },
     getCalendarEvent: async (req, res, next) => {
         try {
@@ -24,7 +18,7 @@ module.exports = {
 
             const events = await CalendarDB.find();
 
-            const newEvents = events.filter(event => event.date >= startDateQuery && event.date <= endDateQuery)
+            const newEvents = events.filter(event => event.date >= startDateQuery && event.date <= endDateQuery);
 
             res.json(newEvents);
         } catch (e) {
@@ -35,19 +29,20 @@ module.exports = {
         try {
 
             const {date} = req.query;
+
             const events = await CalendarDB.find({date: date});
 
             if (events.length > 0) {
                 const arr = [];
                 events.map(async event => {
                     arr.push(event.time)
-                })
+                });
                 const times = await TimeDB.find();
-                const newTime = times.filter(e => !arr.includes(e.title))
-                res.json(newTime)
-
+                const newTime = times.filter(e => !arr.includes(e.title));
+                res.json(newTime);
             }
             const times = await TimeDB.find();
+
             res.json(times);
         } catch (e) {
             next(e);

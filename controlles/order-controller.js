@@ -1,4 +1,4 @@
-const {OrderDB, AnalyzeDB, CategoryDB, ArchiveDB, UserDB} = require("../dataBase");
+const {OrderDB, AnalyzeDB, ArchiveDB} = require("../dataBase");
 const {statusCode, messageCode} = require("../config");
 
 module.exports = {
@@ -10,11 +10,8 @@ module.exports = {
             if (!orders) {
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.NOT_ORDER
-                })
+                });
             }
-
-            // console.log(orders);
-
 
             res.json(orders);
         } catch (e) {
@@ -31,7 +28,7 @@ module.exports = {
             if (!orders) {
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.NOT_ORDER
-                })
+                });
             }
 
             res.json(orders);
@@ -48,7 +45,7 @@ module.exports = {
             if (!order) {
                 return res.status(statusCode.CONFLICT).json({
                     message: messageCode.NOT_CREATE_ORDER
-                })
+                });
             }
 
             res.json(order);
@@ -61,15 +58,13 @@ module.exports = {
 
             const {_id, status} = req.body;
 
-            const orders = await OrderDB.updateOne({_id: _id}, {status: status})
+            const orders = await OrderDB.updateOne({_id: _id}, {status: status});
 
             if (!orders) {
                 return res.status(statusCode.CONFLICT).json({
                     message: messageCode.NOT_UPDATE_STATUS
-                })
+                });
             }
-            //console.log(orders);
-            //const user = await UserDB.findById(user_id)
 
             res.json(orders);
         } catch (e) {
@@ -83,12 +78,11 @@ module.exports = {
 
             const users = await OrderDB.find({user_id});
 
-            if(!users) {
+            if (!users) {
                 return res.status(statusCode.CONFLICT).json({
                     message: messageCode.NOT_FIND_ORDER
-                })
+                });
             }
-// console.log(users);
             res.json(users);
         } catch (e) {
             next(e);
@@ -102,7 +96,7 @@ module.exports = {
             if (!analyze) {
                 return res.status(statusCode.CONFLICT).json({
                     message: messageCode.NOT_FOUND_DATA
-                })
+                });
             }
 
             res.json(analyze);
@@ -116,25 +110,23 @@ module.exports = {
 
             const {month, summa} = req.body;
 
-            const analyze = await AnalyzeDB.findOne({month: month})
+            const analyze = await AnalyzeDB.findOne({month: month});
 
-            if(!analyze) {
+            if (!analyze) {
                 return res.status(statusCode.CONFLICT).json({
                     message: messageCode.NOT_FOUND_DATA
-                })
+                });
             }
 
-            const oldSumma = analyze.summa
-            // console.log(oldSumma);
+            const oldSumma = analyze.summa;
             const newSumma = Number(oldSumma) + Number(summa);
-            // console.log(newSumma);
 
-            const newAnalyze = await AnalyzeDB.updateOne({month: month}, {summa: newSumma})
+            const newAnalyze = await AnalyzeDB.updateOne({month: month}, {summa: newSumma});
 
-            if(!newAnalyze) {
+            if (!newAnalyze) {
                 return res.status(statusCode.CONFLICT).json({
                     message: messageCode.NOT_UPDATE_DATA
-                })
+                });
             }
 
             res.json(newAnalyze);
@@ -151,7 +143,7 @@ module.exports = {
             if (!analyze) {
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.NOT_FOUND_DATA
-                })
+                });
             }
 
             res.json(analyze);
@@ -167,7 +159,7 @@ module.exports = {
             if (!status) {
                 return res.status(statusCode.CONFLICT).json({
                     message: messageCode.NOT_STATUS
-                })
+                });
             }
 
             if (status === 'все') {
@@ -176,10 +168,10 @@ module.exports = {
             }
             const filter = await OrderDB.find({status});
 
-            if(!filter) {
+            if (!filter) {
                 return res.status(statusCode.CONFLICT).json({
                     message: messageCode.NOT_FIND_ORDER
-                })
+                });
             }
 
             res.json(filter);
@@ -192,12 +184,12 @@ module.exports = {
 
             const {_id} = req.body;
 
-            const order = await OrderDB.findById({_id})
+            const order = await OrderDB.findById({_id});
 
             if (!order) {
                 return res.status(statusCode.CONFLICT).json({
                     message: messageCode.NOT_FIND_ORDER
-                })
+                });
             }
 
             const archive = await ArchiveDB.create({
@@ -206,15 +198,15 @@ module.exports = {
                 cart: order.cart,
                 status: order.status,
                 summa: order.summa
-            })
+            });
 
             if (!archive) {
                 return res.status(statusCode.CONFLICT).json({
                     message: messageCode.NOT_CREATE_ORDER_IN_ARCHIVE
-                })
+                });
             }
 
-            const newOrder = await OrderDB.deleteOne({_id})
+            const newOrder = await OrderDB.deleteOne({_id});
 
             res.json(newOrder);
         } catch (e) {
@@ -230,7 +222,7 @@ module.exports = {
             if (!archive) {
                 return res.status(statusCode.CONFLICT).json({
                     message: messageCode.NOT_ORDER
-                })
+                });
             }
 
             res.json(archive);
@@ -243,11 +235,11 @@ module.exports = {
 
             const {_id} = req.query;
 
-            const del = await ArchiveDB.deleteOne({_id})
+            const del = await ArchiveDB.deleteOne({_id});
 
             res.json(del);
         } catch (e) {
             next(e);
         }
     },
-}
+};

@@ -1,11 +1,11 @@
 module.exports = {
-    UserDB: require('./User'),
-    OAuth: require('./O_Auth'),
-    ProductDB: require('./Product'),
-    CategoryDB: require('./Category'),
-    OrderDB: require('./Order'),
     AnalyzeDB: require('./Analyze_order'),
     ArchiveDB: require('./Archive'),
     CalendarDB: require('./Calendar'),
-    TimeDB: require('./Time')
+    CategoryDB: require('./Category'),
+    OAuth: require('./O_Auth'),
+    OrderDB: require('./Order'),
+    ProductDB: require('./Product'),
+    TimeDB: require('./Time'),
+    UserDB: require('./User')
 };

@@ -1,6 +1,7 @@
 const mongoosePagination = require('mongoose-paginate');
+const {Schema, model} = require('mongoose');
 
-const { Schema, model } = require('mongoose');
+const {CATEGORY, PRODUCT} = require("../config/constants");
 
 const productSchema = new Schema({
     product_name: {
@@ -22,7 +23,7 @@ const productSchema = new Schema({
     category_id: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'category'
+        ref: CATEGORY
     },
     count: {
         type: String,
@@ -37,10 +38,8 @@ const productSchema = new Schema({
         required: true,
         unique: true
     }
-}, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
+}, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 
 productSchema.plugin(mongoosePagination);
 
-module.exports = model('product', productSchema);
-
-
+module.exports = model(PRODUCT, productSchema);

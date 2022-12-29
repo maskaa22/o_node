@@ -1,36 +1,15 @@
-// const { Schema, model } = require('mongoose');
-//
-// const orderSchema = new Schema({
-//     user_id: {
-//         type: Schema.Types.ObjectId,
-//         required: true,
-//         ref: 'user'
-//     },
-//     check: {
-//         inventNumCheck: { type: String },
-//         countCheck: { type: String }
-//     },
-//     summa: {
-//         type: String,
-//         required: true
-//     },
-//     status: {
-//         type: String,
-//         required: true
-//     },
-// }, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
-//
-// module.exports = model('order', orderSchema);
+const {Schema, model} = require('mongoose');
 
-const { Schema, model } = require('mongoose');
+const {ORDER} = require("../config/constants");
+const {USER} = require("../config/user-roles-enum");
 
 const orderSchema = new Schema({
     user_id: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'user'
+        ref: USER
     },
-    user_name:{
+    user_name: {
         type: String,
         required: true
     },
@@ -54,7 +33,7 @@ const orderSchema = new Schema({
         type: String,
         trim: true
     },
-    cart:  {},
+    cart: {},
     status: {
         type: String,
         required: true
@@ -67,6 +46,6 @@ const orderSchema = new Schema({
         type: String,
         required: true
     }
-}, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
+}, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 
-module.exports = model('order', orderSchema);
+module.exports = model(ORDER, orderSchema);

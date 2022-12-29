@@ -16,4 +16,4 @@ module.exports = class UserDto {
         this.nameSity = model.nameSity;
         this.nameDepartment = model.nameDepartment;
     }
-}
+};

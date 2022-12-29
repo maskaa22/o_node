@@ -6,7 +6,6 @@ module.exports = {
         const isPasswordMatced = await bcrypt.compare(password, hash);
 
         if (!isPasswordMatced) {
-            //throw new Error('Не правильний пароль');
             return isPasswordMatced;
         }
         return isPasswordMatced;
