@@ -6,5 +6,5 @@ module.exports = {
     orderController: require('./order-controller'),
     paymentController: require('./payment-controller'),
     homeController: require('./home-controller'),
-    contactController: require('./contact-controller')
+    contactController: require('./contact-controller'),
 };

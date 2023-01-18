@@ -1,4 +1,6 @@
+const {ACTION} = require("../config/constants");
 module.exports = {
     ACCESS: 'access',
-    REFRESH: 'refresh'
+    REFRESH: 'refresh',
+    ACTION: 'action',
 };

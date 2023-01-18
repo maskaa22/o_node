@@ -1,9 +1,12 @@
 const {validationResult} = require("express-validator");
 
-const {jwtServise} = require("../servises");
+const {jwtServise, emailServise, passwordServise} = require("../servises");
 const {statusCode, messageCode, constantsConfig} = require("../config");
-const {UserDB, OAuth} = require("../dataBase");
+const {UserDB, OAuth, ActionDB} = require("../dataBase");
 const {userNormalizator, userNormalizatorForAuth,} = require("../utils/user.util");
+const {OK} = require("../config/status-code");
+const {ACTION, WELCOME} = require("../config/constants");
+const {REFRESH} = require("../config/token-type.enum");
 
 module.exports = {
     register: async (req, res, next) => {
@@ -24,6 +27,12 @@ module.exports = {
                     message: messageCode.CHECK_THE_DATA
                 });
             }
+
+            const token = jwtServise.createActionToken();
+
+            await ActionDB.create({ token, type: ACTION, user_id: createdUser._id });
+
+            await emailServise.emailForRegistration(createdUser.email, createdUser.name, token);
 
             const userToReturn = userNormalizator(createdUser);
 
@@ -100,7 +109,7 @@ module.exports = {
                 return res.status(statusCode.UNAUTHORIZED).json({message: messageCode.NOT_FOUND});
             }
 
-            const decoder = await jwtServise.verifyToken(refresh_token, constantsConfig.REFRESH_FOR_TOKEN);
+            const decoder = await jwtServise.verifyToken(refresh_token, REFRESH);
 
             const tokenRespons = await OAuth.findOne({refresh_token: refresh_token}).populate(constantsConfig.USER_ID);
 
@@ -153,5 +162,48 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-    }
+    },
+    sendEmailForResetPassword: async (req, res, next) => {
+        try {
+            const user = req.user;
+
+            const email = user.email;
+            const name = user.name;
+            const user_id = user._id.toString();
+            const link = `http://localhost:3000/:${user_id}/reset-password`;
+
+            const send = await emailServise.sendMailForResetPassword(email, name, link);
+
+            res.json(send);
+        } catch (e) {
+            next(e);
+        }
+    },
+    resetPassword: async (req, res, next) => {
+        try {
+
+            const {password, passwordToo, _id} = req.body;
+
+            if (password === passwordToo) {
+                const hashedPassword = await passwordServise.hash(password);
+                await UserDB.updateOne({_id}, {password: hashedPassword});
+            }
+
+            res.json(OK);
+        } catch (e) {
+            next(e);
+        }
+    },
+    activate: async (req, res, next) => {
+        try {
+
+            const { _id } = req.user;
+
+            await UserDB.updateOne({ _id }, { is_active: true });
+
+            res.json('User is Active');
+        } catch (e) {
+            next(e);
+        }
+    },
 };

@@ -1,6 +1,7 @@
 const {passwordServise, jwtServise} = require("../servises");
-const {statusCode, messageCode} = require("../config");
-const {UserDB, OAuth} = require("../dataBase");
+const {statusCode, messageCode, tokenTypeEnum} = require("../config");
+const {UserDB, OAuth, ActionDB} = require("../dataBase");
+const {validationResult} = require("express-validator");
 
 module.exports = {
     isUserEmailPresent: async (req, res, next) => {
@@ -113,5 +114,71 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-    }
+    },
+    checkPassword: async (req, res, next) => {
+        try {
+
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                return res.status(statusCode.BAD_REQUEST).json({
+                    errors: errors.array(),
+                    message: messageCode.INCORRECT_DATA
+                });
+            }
+
+            const {_id} = req.body;
+
+            const userByEmail = await UserDB.findOne({_id});
+
+            if (!userByEmail) {
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.CONFLICT_EMAIL
+                });
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+    checkPasswordForDublicate: async (req, res, next) => {
+        try {
+
+            const {password, passwordToo} = req.body;
+
+            if (password !== passwordToo) {
+                return res.status(statusCode.CONFLICT).json({
+                    message: messageCode.INCORRECT_PASSWORD
+                });
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+    checkActivateToken: async (req, res, next) => {
+        try {
+            const { token } = req.query;
+
+             await jwtServise.verifyToken(token, tokenTypeEnum.ACTION);
+
+            const { user_id: user, _id } = await ActionDB.findOne({ token, type: tokenTypeEnum.ACTION }).populate('user_id');
+
+            if (!user) {
+                return res.status(statusCode.UNAUTHORIZED).json({
+                    message: messageCode.NOT_FOUND
+                });
+            }
+
+            await ActionDB.deleteOne({ _id });
+
+            req.user = user;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
 };

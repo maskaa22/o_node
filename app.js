@@ -1,6 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 
 const {
@@ -16,7 +17,7 @@ const {
     CATEGORY_,
     CREATE_CHECKOUT_SESSION,
     HOME,
-    CONTACT
+    CONTACT,
 } = require("./config/constants");
 const {PORT_3000} = require("./config/variables");
 const {
@@ -32,6 +33,8 @@ const {
     variablesConfig: {PORT, MONGO_CONNECT_URL}, messageCode
 } = require('./config');
 
+const path = require('path');
+
 mongoose.connect(MONGO_CONNECT_URL);
 
 const app = express();
@@ -41,6 +44,8 @@ app.use(cors({
 }));
 
 app.use(express.json({extended: true}));
+app.use(express.static(path.resolve(__dirname, 'static')));
+ app.use(fileUpload({}));
 app.use(cookieParser());
 
 app.use(AUTH, authRouter);

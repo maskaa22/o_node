@@ -16,22 +16,22 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
-    // image: {
-    //     type: String,
-    //     required: true
-    // }
+    img: {
+        type: String,
+        // allowNull: false
+    },
     category_id: {
         type: Schema.Types.ObjectId,
-        required: true,
+        // required: true, // нужно обязательно
         ref: CATEGORY
     },
     count: {
         type: String,
-        required: true
+        // required: true
     },
     totalPrice: {
         type: String,
-        required: true
+        // required: true
     },
     inventoryNumber: {
         type: String,

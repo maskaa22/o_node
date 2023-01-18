@@ -25,6 +25,11 @@ const userSchema = new Schema({
         default: userRolesEnumConfig.USER,
         enum: Object.values(userRolesEnumConfig)
     },
+    passwordToo: {
+        type: String,
+        trim: true,
+        select: true
+    },
     phone: {
         type: String,
         trim: true
@@ -33,6 +38,10 @@ const userSchema = new Schema({
         type: String,
         trim: true
     },
+    // img: {
+    //         data: Buffer,
+    //         //contentType: String
+    // },
     surname: {
         type: String,
         trim: true
@@ -45,6 +54,11 @@ const userSchema = new Schema({
         type: String,
         trim: true
     },
+    is_active: {
+        type: Boolean,
+        default: false,
+        required: true
+    }
 }, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 
 userSchema.statics = {

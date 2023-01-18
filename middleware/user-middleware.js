@@ -21,36 +21,6 @@ module.exports = {
             next(e);
         }
     },
-    // updatePassword: async (req, res, next) => {
-    //     try {
-    //         const { _id, number, numberToo } = req.body;
-    //
-    //             if(number===numberToo) {
-    //                 const hashedPassword = await passwordServise.hash(number);
-    //                 await UserDB.updateOne({_id}, {password: hashedPassword});
-    //             }
-    //
-    //         next();
-    //     } catch (e) {
-    //         next(e);
-    //     }
-    // },
-    checkPassword: async (req, res, next) => {
-        try {
-            const {password, pereatPassword} = req.body;
-
-            if (password !== pereatPassword) {
-
-                return res.status(statusCode.CONFLICT).json({
-                    message: messageCode.INCORRECT_PASSWORD
-                });
-            }
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
     checkContactData: async (req, res, next) => {
         try {
             const {name, surname, phone} = req.body;

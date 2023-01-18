@@ -1,10 +1,17 @@
 const {ProductDB} = require("../dataBase");
 const {statusCode, messageCode} = require("../config");
+const uuid = require("uuid");
+const path = require("path");
 
 module.exports = {
     createProduct: async (req, res, next) => {
         try {
-            const {product_name, title, price, inventoryNumber} = req.body;
+            const {product_name, title, price, category_id, inventoryNumber} = req.body;
+            //console.log(req.files);
+            const {img} = req.files;
+             let fileName = uuid.v4()+".jpg";
+             const pathFile = path.resolve(__dirname, '..', 'static', fileName);
+              img.mv(pathFile);
 
             if (product_name === '' || title === '' || price === '') {
                 return res.status(statusCode.METHOD_NOT_ALLOWED).json({
@@ -12,7 +19,7 @@ module.exports = {
                 });
             }
 
-            const number = await ProductDB.find({inventoryNumber: inventoryNumber});
+            const number = await ProductDB.findOne({inventoryNumber: inventoryNumber});
 
             if (number) {
                 return res.status(statusCode.BAD_REQUEST).json({
@@ -20,7 +27,8 @@ module.exports = {
                 });
             }
 
-            const product = await ProductDB.create(req.body);
+            // const product = await ProductDB.create(req.body);
+            const product = await ProductDB.create({product_name, title, price, totalPrice: price, count:1, inventoryNumber, category_id, img:fileName});
 
             if (!product) {
                 return res.status(statusCode.BAD_REQUEST).json({

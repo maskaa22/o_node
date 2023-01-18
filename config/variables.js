@@ -1,9 +1,11 @@
 require('dotenv').config();
 
 module.exports = {
+    ACTIVATE_TOKEN_URL: 'http://localhost:3000/auth/activate/',
     CANCEL_URL: 'http://localhost:3000/*',
 
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || 'secret_world',
+    JWT_ACTION_SECRET: process.env.JWT_ACTION_SECRET || 'action_world',
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'refresh_world',
 
     MONGO_CONNECT_URL: process.env.MONGO_CONNECT_URL || 'mongodb://localhost:27017/june-2021',

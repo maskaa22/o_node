@@ -8,7 +8,7 @@ const {userNormalizator} = require("../utils/user.util");
 module.exports = {
     getAllUsers: async (req, res, next) => {
         try {
-            const users = await UserDB.find();
+            const users = await UserDB.find().where({role: 'user'});
 
             if (!users) {
                 return res.status(statusCode.NOT_FOUND).json({

@@ -7,5 +7,6 @@ module.exports = {
     OrderDB: require('./Order'),
     ProductDB: require('./Product'),
     TimeDB: require('./Time'),
-    UserDB: require('./User')
+    UserDB: require('./User'),
+    ActionDB: require('./Action')
 };
