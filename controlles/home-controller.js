@@ -25,6 +25,20 @@ module.exports = {
             next(e);
         }
     },
+    getCalendarEventForId: async (req, res, next) => {
+        try {
+
+            const {user_id} = req.query;
+            
+            const events = await CalendarDB.find({user_id});
+
+            console.log(events);
+
+            res.json(events);
+        } catch (e) {
+            next(e);
+        }
+    },
     getFindEvent: async (req, res, next) => {
         try {
 

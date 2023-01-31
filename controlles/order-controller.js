@@ -75,7 +75,7 @@ module.exports = {
     getOrderByIdUser: async (req, res, next) => {
         try {
 
-            const {user_id} = req.params;
+            const {user_id} = req.query;
 
             const users = await OrderDB.find({user_id});
 

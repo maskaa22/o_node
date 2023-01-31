@@ -8,6 +8,9 @@ router.get(constantsConfig.THIS,
     authMiddleware.checkAccessToken,
     userConttoller.getAllUsers);
 
+router.get(constantsConfig.FIND_FOTO_FOR_TOKEN,
+    userConttoller.findIdUser);
+
 router.patch(constantsConfig.ADRESS,
     userMiddleware.checkAdressData,
     userMiddleware.updateAdressDataMiddleware,
@@ -26,5 +29,8 @@ router.patch(constantsConfig.THIS,
 
 router.post(constantsConfig.SEND,
     userConttoller.sendUser);
+
+router.post(constantsConfig.THIS,
+    userConttoller.addFoto);
 
 module.exports = router;

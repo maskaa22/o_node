@@ -15,6 +15,7 @@ module.exports = {
     EMAIL: 'email',
     EMAIL_FOR_RESET_PASSWORD: '/email_reset_password',
     FIND: '/find',
+    FIND_FOTO_FOR_TOKEN: '/find_foto_for_token',
     GET: 'GET',
     GMAIL: 'gmail',
     HOME: '/home',

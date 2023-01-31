@@ -11,8 +11,8 @@ const {JWT_ACTION_SECRET} = require("../config/variables");
 
 module.exports = {
      generateTokenPair: (id) => {
-        const access_token = jwt.sign({id}, JWT_ACCESS_SECRET, {expiresIn: '30m'});
-        const refresh_token = jwt.sign({id}, JWT_REFRESH_SECRET, {expiresIn: '30d'});
+        const access_token = jwt.sign({id}, JWT_ACCESS_SECRET, {expiresIn: '30s'});
+        const refresh_token = jwt.sign({id}, JWT_REFRESH_SECRET, {expiresIn: '60s'});
 
         return {
             access_token,
