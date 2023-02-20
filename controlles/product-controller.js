@@ -70,7 +70,7 @@ module.exports = {
 
             const number = await ProductDB.find({inventoryNumber: inventoryNumber});
 
-            if (number) {
+            if (!number) {
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.INVALID_INVENTORY_NUMBER
                 });

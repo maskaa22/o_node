@@ -6,14 +6,13 @@ module.exports = {
 
     payment: async (req, res, next) => {
         try {
-//console.log(req.body);
+
             const line_items = req.body.cart.map(item => {
                 return {
                     price_data: {
                         currency: constantsConfig.UAH,
                         product_data: {
                             name: item.product_name,
-                            //Images: [item.image]
                             description: item.title,
                             metadata: {
                                 id: item.id

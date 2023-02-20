@@ -118,6 +118,7 @@ module.exports = {
             if (!decoder || !tokenRespons) {
                 return res.status(statusCode.UNAUTHORIZED).json({message: messageCode.NOT_FOUND});
             }
+
             const tokenPair = jwtServise.generateTokenPair();
 
             if (!tokenPair) {

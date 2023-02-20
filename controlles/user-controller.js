@@ -123,8 +123,9 @@ module.exports = {
         try {
 
             const {refresh_token} = req.cookies;
-
+console.log(refresh_token);
             const user = await OAuth.findOne({refresh_token: refresh_token}).populate(constantsConfig.USER_ID);
+            console.log(user);
 // console.log(tokenRespons.user_id);
 //const user = tokenRespons
 //             const user = userNormalizatorForAuth(tokenRespons);
