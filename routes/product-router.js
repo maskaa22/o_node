@@ -1,14 +1,12 @@
 const router = require('express').Router();
 
 const {constantsConfig} = require("../config");
-const {orderMiddleware, userMiddleware} = require('../middleware');
+const {orderMiddleware, userMiddleware, productMiddleware} = require('../middleware');
 const {productController, orderController} = require('../controlles');
 
 router.get(constantsConfig.THIS, productController.allProduct);
 
 router.get(constantsConfig.ORDER_ANALYZE, orderController.getDataAnalyze);
-
-router.get(constantsConfig.ORDER_ANALYZE_VISUAL, orderController.getOrdersForAnalys);
 
 router.get(constantsConfig.ORDER_BY_USER, orderController.getOrderByIdUser);
 
@@ -24,8 +22,6 @@ router.delete(constantsConfig.ARCHIVE_ORDER, orderController.deleteArchiveOrders
 
 router.delete(constantsConfig.THIS, productController.deleteProduct);
 
-router.patch(constantsConfig.ORDER_ANALYZE, orderController.updateAnalyzOrder);
-
 router.post(constantsConfig.ARCHIVE_ORDER, orderController.archiveOrder);
 
 router.post(constantsConfig.ORDER_ANALYZE, orderController.analyzOrder);
@@ -35,6 +31,8 @@ router.post(constantsConfig.ORDERS,
     orderMiddleware.checkEmptyFields,
     orderController.createOrder);
 
-router.post(constantsConfig.THIS, productController.createProduct);
+router.post(constantsConfig.THIS,
+    productMiddleware.checkProductDate,
+    productController.createProduct);
 
 module.exports = router;

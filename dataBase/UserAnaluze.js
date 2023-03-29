@@ -1,16 +1,14 @@
 const {Schema, model} = require('mongoose');
 
-const {ANALYZE} = require("../config/constants");
+const {USERS_ANALYZE} = require("../config/constants");
 
 const orderSchema = new Schema({
+    count: {
+        type: Number,
+    },
     month: {
         type: String,
-        required: true
-    },
-    summa: {
-        type: Number,
-        required: true
     }
 }, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 
-module.exports = model(ANALYZE, orderSchema);
+module.exports = model(USERS_ANALYZE, orderSchema);

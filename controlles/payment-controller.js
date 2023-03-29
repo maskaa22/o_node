@@ -6,7 +6,6 @@ module.exports = {
 
     payment: async (req, res, next) => {
         try {
-
             const line_items = req.body.cart.map(item => {
                 return {
                     price_data: {

@@ -1,6 +1,6 @@
-const {ARCHIVE} = require("../config/constants");
 const {Schema, model} = require('mongoose');
 
+const {ARCHIVE} = require("../config/constants");
 const {USER} = require("../config/user-roles-enum");
 
 const orderSchema = new Schema({

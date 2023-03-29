@@ -6,8 +6,10 @@ module.exports = {
         const isPasswordMatced = await bcrypt.compare(password, hash);
 
         if (!isPasswordMatced) {
+
             return isPasswordMatced;
         }
+
         return isPasswordMatced;
     }
 };

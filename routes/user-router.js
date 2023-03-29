@@ -11,6 +11,9 @@ router.get(constantsConfig.THIS,
 router.get(constantsConfig.FIND_FOTO_FOR_TOKEN,
     userConttoller.findIdUser);
 
+router.get(constantsConfig._ANALYZE,
+    userConttoller.getUserForAnalyze);
+
 router.patch(constantsConfig.ADRESS,
     userMiddleware.checkAdressData,
     userMiddleware.updateAdressDataMiddleware,

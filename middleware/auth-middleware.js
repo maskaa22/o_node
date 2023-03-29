@@ -2,6 +2,7 @@ const {passwordServise, jwtServise} = require("../servises");
 const {statusCode, messageCode, tokenTypeEnum} = require("../config");
 const {UserDB, OAuth, ActionDB} = require("../dataBase");
 const {validationResult} = require("express-validator");
+const {USER_ID} = require("../config/constants");
 
 module.exports = {
     isUserEmailPresent: async (req, res, next) => {
@@ -97,7 +98,6 @@ module.exports = {
     },
     delOldToken: async (req, res, next) => {
         try {
-
             const date = new Date();
 
             const oldDate = new Date(date.getFullYear(), date.getMonth() - 2, 1);
@@ -117,7 +117,6 @@ module.exports = {
     },
     checkPassword: async (req, res, next) => {
         try {
-
             const errors = validationResult(req);
 
             if (!errors.isEmpty()) {
@@ -144,7 +143,6 @@ module.exports = {
     },
     checkPasswordForDublicate: async (req, res, next) => {
         try {
-
             const {password, passwordToo} = req.body;
 
             if (password !== passwordToo) {
@@ -160,11 +158,14 @@ module.exports = {
     },
     checkActivateToken: async (req, res, next) => {
         try {
-            const { token } = req.query;
+            const {token} = req.query;
 
-             await jwtServise.verifyToken(token, tokenTypeEnum.ACTION);
+            await jwtServise.verifyToken(token, tokenTypeEnum.ACTION);
 
-            const { user_id: user, _id } = await ActionDB.findOne({ token, type: tokenTypeEnum.ACTION }).populate('user_id');
+            const {user_id: user, _id} = await ActionDB.findOne({
+                token,
+                type: tokenTypeEnum.ACTION
+            }).populate(USER_ID);
 
             if (!user) {
                 return res.status(statusCode.UNAUTHORIZED).json({
@@ -172,7 +173,7 @@ module.exports = {
                 });
             }
 
-            await ActionDB.deleteOne({ _id });
+            await ActionDB.deleteOne({_id});
 
             req.user = user;
 

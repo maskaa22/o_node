@@ -58,7 +58,7 @@ module.exports = {
 
             const options = {
                 page: parseInt(page, 10) || 1,
-                limit: parseInt(limit, 5) || 5,
+                limit: parseInt(limit, 10) || 5,
             };
 
             const products = await ProductDB.paginate({

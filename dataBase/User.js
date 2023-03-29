@@ -37,10 +37,6 @@ const userSchema = new Schema({
     foto: {
         type: String,
     },
-    // img: {
-    //         data: Buffer,
-    //         //contentType: String
-    // },
     surname: {
         type: String,
         trim: true

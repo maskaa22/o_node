@@ -9,6 +9,7 @@ module.exports = {
             const user = await UserDB.findById({_id: user_id});
 
             if (!user) {
+
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.NOT_FOUND
                 });
@@ -26,6 +27,7 @@ module.exports = {
             const {name, surname, phone} = req.body;
 
             if (name === '' && surname === '' && phone === '') {
+
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.FILL_FIELDS
                 });
@@ -41,6 +43,7 @@ module.exports = {
             const {nameSity, nameDepartment} = req.body;
 
             if (nameSity === '' && nameDepartment === '') {
+
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.FILL_FIELDS
                 });
@@ -57,6 +60,7 @@ module.exports = {
 
             if (name === '' && surname === '' && email === '' && phone === '' && oldPassword === '' && number === ''
                 && numberToo === '' && ((nameSity === undefined && nameDepartment === undefined) || (nameSity === '' && nameDepartment === ''))) {
+
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.FILL_FIELDS
                 });

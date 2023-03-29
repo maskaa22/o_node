@@ -1,4 +1,5 @@
 module.exports = {
+    ActionDB: require('./Action'),
     AnalyzeDB: require('./Analyze_order'),
     ArchiveDB: require('./Archive'),
     CalendarDB: require('./Calendar'),
@@ -8,5 +9,5 @@ module.exports = {
     ProductDB: require('./Product'),
     TimeDB: require('./Time'),
     UserDB: require('./User'),
-    ActionDB: require('./Action')
+    UserAnalyzeDB: require('./UserAnaluze')
 };

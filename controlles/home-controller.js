@@ -1,9 +1,16 @@
 const {CalendarDB, TimeDB} = require("../dataBase");
+const {statusCode, messageCode} = require("../config");
 
 module.exports = {
     createCalendarEvent: async (req, res, next) => {
         try {
+            const {description, time} = req.body;
 
+            if (description === '' || time === '') {
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.NOT_FOUND_DATA_EVENT
+                });
+            }
             const createdEvent = await CalendarDB.create(req.body);
 
             res.json(createdEvent);
@@ -13,7 +20,6 @@ module.exports = {
     },
     getCalendarEvent: async (req, res, next) => {
         try {
-
             const {startDateQuery, endDateQuery} = req.query;
 
             const events = await CalendarDB.find();
@@ -27,12 +33,9 @@ module.exports = {
     },
     getCalendarEventForId: async (req, res, next) => {
         try {
-
             const {user_id} = req.query;
-            
-            const events = await CalendarDB.find({user_id});
 
-            console.log(events);
+            const events = await CalendarDB.find({user_id});
 
             res.json(events);
         } catch (e) {
@@ -41,7 +44,6 @@ module.exports = {
     },
     getFindEvent: async (req, res, next) => {
         try {
-
             const {date} = req.query;
 
             const events = await CalendarDB.find({date: date});
@@ -49,12 +51,13 @@ module.exports = {
             if (events.length > 0) {
                 const arr = [];
                 events.map(async event => {
-                    arr.push(event.time)
+                    arr.push(event.time);
                 });
                 const times = await TimeDB.find();
                 const newTime = times.filter(e => !arr.includes(e.title));
                 res.json(newTime);
             }
+
             const times = await TimeDB.find();
 
             res.json(times);

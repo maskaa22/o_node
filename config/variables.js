@@ -8,7 +8,6 @@ module.exports = {
     JWT_ACTION_SECRET: process.env.JWT_ACTION_SECRET || 'action_world',
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'refresh_world',
 
-    //MONGO_CONNECT_URL: process.env.MONGO_CONNECT_URL || 'mongodb://localhost:27017/june-2021',
     MONGO_CONNECT_URL: process.env.MONGO_CONNECT_URL || 'mongodb+srv://sokolavanila22:QeMLeFGPkvDA8pjG@olenastudiocluster.ketyl47.mongodb.net/?retryWrites=true&w=majority',
     NODE_ENV: process.env.NODE_ENV || 'dev',
 
@@ -18,6 +17,6 @@ module.exports = {
     PORT: process.env.PORT || 5000,
     PORT_3000: 'http://localhost:3000',
 
-    SECRET_KEY_STRIPE:process.env.SECRET_KEY_STRIPE,
-    SUCCESS_URL:'http://localhost:3000/products',
+    SECRET_KEY_STRIPE: process.env.SECRET_KEY_STRIPE,
+    SUCCESS_URL: 'http://localhost:3000/products',
 };

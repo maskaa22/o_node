@@ -1,12 +1,13 @@
 const {validationResult} = require("express-validator");
 
-const {jwtServise, emailServise, passwordServise} = require("../servises");
-const {statusCode, messageCode, constantsConfig} = require("../config");
-const {UserDB, OAuth, ActionDB} = require("../dataBase");
-const {userNormalizator, userNormalizatorForAuth,} = require("../utils/user.util");
+const {ACTION, LOCALES, OPTIONS, RESET_PASSWORD_FOR_LINK, USERS_IS_ACTIVE} = require("../config/constants");
+const {jwtServise, emailServise, passwordServise, deleteFileServise} = require("../servises");
 const {OK} = require("../config/status-code");
-const {ACTION, WELCOME} = require("../config/constants");
 const {REFRESH} = require("../config/token-type.enum");
+const {statusCode, messageCode, constantsConfig} = require("../config");
+const {UserDB, OAuth, ActionDB, UserAnalyzeDB} = require("../dataBase");
+const {userNormalizator, userNormalizatorForAuth,} = require("../utils/user.util");
+const {PORT_3000} = require("../config/variables");
 
 module.exports = {
     register: async (req, res, next) => {
@@ -30,9 +31,21 @@ module.exports = {
 
             const token = jwtServise.createActionToken();
 
-            await ActionDB.create({ token, type: ACTION, user_id: createdUser._id });
+            await ActionDB.create({token, type: ACTION, user_id: createdUser._id});
 
             await emailServise.emailForRegistration(createdUser.email, createdUser.name, token);
+
+            const month = new Date().toLocaleString(LOCALES, {month: OPTIONS});
+
+            const userFind = await UserAnalyzeDB.findOne({month: month});
+
+            if (!userFind) {
+                await UserAnalyzeDB.create({count: 1, month: month});
+            } else {
+                const count = Number(userFind.count) + 1;
+
+                await UserAnalyzeDB.updateOne({month: month}, {count: count});
+            }
 
             const userToReturn = userNormalizator(createdUser);
 
@@ -102,7 +115,6 @@ module.exports = {
     },
     refresh: async (req, res, next) => {
         try {
-
             const {refresh_token} = req.cookies;
 
             if (!refresh_token) {
@@ -155,11 +167,15 @@ module.exports = {
                 });
             }
 
+            const user = await UserDB.findOne({email});
+
+            deleteFileServise.deleteFile(user.foto);
+
             await UserDB.deleteOne({email});
 
             return res.status(statusCode.OK).json({
                 message: messageCode.DELETE_USER
-            })
+            });
         } catch (e) {
             next(e);
         }
@@ -171,7 +187,7 @@ module.exports = {
             const email = user.email;
             const name = user.name;
             const user_id = user._id.toString();
-            const link = `http://localhost:3000/:${user_id}/reset-password`;
+            const link = `${PORT_3000}/:${user_id}/${RESET_PASSWORD_FOR_LINK}`;
 
             const send = await emailServise.sendMailForResetPassword(email, name, link);
 
@@ -182,11 +198,11 @@ module.exports = {
     },
     resetPassword: async (req, res, next) => {
         try {
-
             const {password, passwordToo, _id} = req.body;
 
             if (password === passwordToo) {
                 const hashedPassword = await passwordServise.hash(password);
+
                 await UserDB.updateOne({_id}, {password: hashedPassword});
             }
 
@@ -197,12 +213,11 @@ module.exports = {
     },
     activate: async (req, res, next) => {
         try {
+            const {_id} = req.user;
 
-            const { _id } = req.user;
+            await UserDB.updateOne({_id}, {is_active: true});
 
-            await UserDB.updateOne({ _id }, { is_active: true });
-
-            res.json('User is Active');
+            res.json(USERS_IS_ACTIVE);
         } catch (e) {
             next(e);
         }

@@ -7,6 +7,7 @@ module.exports = {
 
             if (user_name === '' || surname === '' || phone === '' || nameSity === '' || nameDepartment === '' ||
                 pay === '' || cart === '' || status === '' || summa === '' || month === '') {
+
                 return res.status(statusCode.BAD_REQUEST).json({
                     message: messageCode.EMPTY_FIELDS
                 });

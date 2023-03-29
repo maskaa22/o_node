@@ -1,34 +1,33 @@
-const {ProductDB} = require("../dataBase");
-const {statusCode, messageCode} = require("../config");
-const uuid = require("uuid");
 const path = require("path");
+const uuid = require("uuid");
+
+const {ProductDB} = require("../dataBase");
+const {STATIC, JPG} = require("../config/constants");
+const {statusCode, messageCode} = require("../config");
+const {deleteFileServise} = require("../servises");
 
 module.exports = {
     createProduct: async (req, res, next) => {
         try {
-            const {product_name, title, price, category_id, inventoryNumber} = req.body;
-            //console.log(req.files);
+            const {product_name, title, price, category_id, inventoryNumber, dosage} = req.body;
+
             const {img} = req.files;
-             let fileName = uuid.v4()+".jpg";
-             const pathFile = path.resolve(__dirname, '..', 'static', fileName);
-              img.mv(pathFile);
 
-            if (product_name === '' || title === '' || price === '') {
-                return res.status(statusCode.METHOD_NOT_ALLOWED).json({
-                    message: messageCode.EMPTY_FIELDS
-                });
-            }
+            let fileName = uuid.v4() + JPG;
+            const pathFile = path.resolve(__dirname, '..', STATIC, fileName);
+            img.mv(pathFile);
 
-            const number = await ProductDB.findOne({inventoryNumber: inventoryNumber});
-
-            if (number) {
-                return res.status(statusCode.BAD_REQUEST).json({
-                    message: messageCode.INVENTORY_NUMBER_IS_ALREADY_USED
-                });
-            }
-
-            // const product = await ProductDB.create(req.body);
-            const product = await ProductDB.create({product_name, title, price, totalPrice: price, count:1, inventoryNumber, category_id, img:fileName});
+            const product = await ProductDB.create({
+                product_name,
+                title,
+                dosage,
+                price,
+                totalPrice: price,
+                count: 1,
+                inventoryNumber,
+                category_id,
+                img: fileName
+            });
 
             if (!product) {
                 return res.status(statusCode.BAD_REQUEST).json({
@@ -68,13 +67,15 @@ module.exports = {
                 });
             }
 
-            const number = await ProductDB.find({inventoryNumber: inventoryNumber});
+            const product = await ProductDB.findOne({inventoryNumber: inventoryNumber});
 
-            if (!number) {
+            if (!product) {
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.INVALID_INVENTORY_NUMBER
                 });
             }
+
+            deleteFileServise.deleteFile(product.img);
 
             const products = await ProductDB.deleteOne({inventoryNumber});
 

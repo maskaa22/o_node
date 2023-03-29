@@ -1,7 +1,7 @@
 module.exports = {
     CATEGORY_ALREADY_EXISTS: 'Категорія вже існує',
-    CHECK_THE_DATA: 'Перевірте дані',
     CHANGE_PASSWORD: 'Для зміни пароля заповніть поля',
+    CHECK_THE_DATA: 'Перевірте дані',
     CONFLICT_EMAIL: 'Така пошта не зареєстрована',
     CREATED: 'Користувач створений',
     DATA_IS_SAVED: 'Дані збережені',
@@ -21,6 +21,7 @@ module.exports = {
     NOT_FIND_ORDER: 'Замовлення відсутнє',
     NOT_FOUND: 'Користувач відсутній',
     NOT_FOUND_DATA: 'Дані відсутні',
+    NOT_FOUND_DATA_EVENT: 'Перевірте час та тип роботи',
     NOT_FOUNDS: 'Користувачі відсутні',
     NOT_ORDER: 'Не має замовлень',
     NOT_PRODUCT: 'Не має продуктів',

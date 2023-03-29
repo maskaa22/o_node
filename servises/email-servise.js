@@ -1,9 +1,8 @@
 const nodemailer = require('nodemailer');
 
-const { variablesConfig: { NO_REPLY_EMAIL, NO_REPLY_EMAIL_PASSWORD } } = require('../config');
-const {GMAIL} = require("../config/constants");
-const {link} = require("joi");
 const {ACTIVATE_TOKEN_URL} = require("../config/variables");
+const {GMAIL} = require("../config/constants");
+const {variablesConfig: {NO_REPLY_EMAIL, NO_REPLY_EMAIL_PASSWORD}} = require('../config');
 
 const transporter = nodemailer.createTransport({
     service: GMAIL,
@@ -14,7 +13,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendMail = (userMail, text, subject) => transporter.sendMail({
-    from: '"OStudio" <g@example.com>',
+    from: '"OStudio" <g@example.com>',//пошта sokolavanila22@gmail.com (для перевірки)
     to: userMail,
     subject: subject,
     text: text
@@ -29,7 +28,7 @@ const sendMailForUs = (name, email, phone, text) => transporter.sendMail({
 });
 
 const sendMailForResetPassword = (email, name, link) => transporter.sendMail({
-    from: '"OStudio" <g@example.com>',
+    from: '"OStudio" <g@example.com>',//пошта sokolavanila22@gmail.com (для перевірки)
     to: email,
     subject: `Вітаємо, ${name}`,
     html: `<p>Для того щоб відновити пароль, перейдіть по посиланню нижче.</p>` +
@@ -37,7 +36,7 @@ const sendMailForResetPassword = (email, name, link) => transporter.sendMail({
 });
 
 const emailForRegistration = (email, name, token) => transporter.sendMail({
-    from: '"OStudio" <g@example.com>',
+    from: '"OStudio" <g@example.com>',//пошта sokolavanila22@gmail.com (для перевірки)
     to: email,
     subject: `Вітаємо, ${name}`,
     html: `<p>Для того щоб підтвердити пошту, перейдіть по посиланню нижче.</p>` +

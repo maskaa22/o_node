@@ -12,26 +12,25 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
+    dosage: {
+        type: String,
+    },
     price: {
         type: String,
         required: true
     },
     img: {
         type: String,
-        // allowNull: false
     },
     category_id: {
         type: Schema.Types.ObjectId,
-        // required: true, // нужно обязательно
         ref: CATEGORY
     },
     count: {
         type: String,
-        // required: true
     },
     totalPrice: {
         type: String,
-        // required: true
     },
     inventoryNumber: {
         type: String,

@@ -5,5 +5,5 @@ module.exports = {
     homeRouter: require('./home-router'),
     paymentRouter: require('./payment-router'),
     productRouter: require('./product-router'),
-    userRouter: require('./user-router'),
+    userRouter: require('./user-router')
 };
