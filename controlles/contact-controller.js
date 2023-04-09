@@ -7,10 +7,14 @@ module.exports = {
             const {name, email, phone, text} = req.body;
 
             if (!name || !email || !phone || !text) {
-                return res.status(statusCode.BAD_REQUEST).json({message: messageCode.EMPTY_FIELDS});
+                return res.status(statusCode.NOT_FOUND).json({message: messageCode.EMPTY_FIELDS});
             }
 
             const send = await emailServise.sendMailForUs(name, email, phone, text);
+
+            if(!send) {
+                return res.status(statusCode.BAD_REQUEST).json({message: messageCode.INCORRECT_DATA});
+            }
 
             res.json(send);
         } catch (e) {

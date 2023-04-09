@@ -1,7 +1,7 @@
 const uuid = require("uuid");
 const path = require("path");
 
-const {emailServise} = require("../servises");
+const {emailServise, deleteFileServise} = require("../servises");
 const passwordServise = require("../servises/password-servise");
 const {STATIC, JPG, SELECT} = require("../config/constants");
 const {statusCode, messageCode, constantsConfig} = require("../config");
@@ -92,6 +92,12 @@ module.exports = {
         try {
             const {text, email, topic} = req.body;
 
+            if(!text || !email || !topic) {
+                res.status(statusCode.BAD_REQUEST).json({
+                    message: messageCode.FILL_FIELDS
+                });
+            }
+
             const send = await emailServise.sendMail(email, text, topic);
 
             res.json(send);
@@ -107,6 +113,12 @@ module.exports = {
             let fileName = uuid.v4() + JPG;
             const pathFile = path.resolve(__dirname, '..', STATIC, fileName);
             foto.mv(pathFile);
+
+            const userFoto = await UserDB.findById({_id});
+
+            if(userFoto.foto) {
+                deleteFileServise.deleteFile(userFoto.foto);
+            }
 
             await UserDB.updateOne({_id}, {foto: fileName});
 

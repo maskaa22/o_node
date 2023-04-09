@@ -30,7 +30,7 @@ const productSchema = new Schema({
         type: String,
     },
     totalPrice: {
-        type: String,
+        type: String
     },
     inventoryNumber: {
         type: String,

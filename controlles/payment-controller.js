@@ -7,6 +7,7 @@ module.exports = {
     payment: async (req, res, next) => {
         try {
             const line_items = req.body.cart.map(item => {
+
                 return {
                     price_data: {
                         currency: constantsConfig.UAH,
@@ -27,7 +28,7 @@ module.exports = {
                 line_items,
                 mode: constantsConfig.PAYMENT,
                 success_url: SUCCESS_URL,
-                cancel_url: CANCEL_URL,
+                cancel_url: CANCEL_URL
             });
 
             res.json(session);

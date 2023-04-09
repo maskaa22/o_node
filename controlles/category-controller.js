@@ -25,14 +25,14 @@ module.exports = {
             const category_name = req.body;
 
             if (category_name.category_name === '') {
-                return res.status(statusCode.METHOD_NOT_ALLOWED).json({
-                    message: messageCode.EMPTY_FIELDS
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.FILL_FIELDS
                 });
             }
             const findCategory = await CategoryDB.findOne(category_name);
 
             if (findCategory) {
-                return res.status(statusCode.METHOD_NOT_ALLOWED).json({
+                return res.status(statusCode.BAD_REQUEST).json({
                     message: messageCode.CATEGORY_ALREADY_EXISTS
                 });
             }
@@ -48,7 +48,7 @@ module.exports = {
         try {
             const filter = req.body;
 
-            if (!filter) {
+            if (!filter || filter.checkCategory==='') {
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.NOT_CATEGORY
                 });

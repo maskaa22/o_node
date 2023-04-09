@@ -57,7 +57,7 @@ module.exports = {
             const users = await OrderDB.find({user_id});
 
             if (!users) {
-                return res.status(statusCode.CONFLICT).json({
+                return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.NOT_FIND_ORDER
                 });
             }
@@ -127,7 +127,7 @@ module.exports = {
             const filter = await OrderDB.find({status});
 
             if (!filter) {
-                return res.status(statusCode.CONFLICT).json({
+                return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.NOT_FIND_ORDER
                 });
             }
@@ -140,6 +140,12 @@ module.exports = {
     archiveOrder: async (req, res, next) => {
         try {
             const {_id} = req.body;
+
+            if(_id===''){
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.NOT_FIND_ORDER
+                });
+            }
 
             const order = await OrderDB.findById({_id});
 
@@ -175,7 +181,7 @@ module.exports = {
             const archive = await ArchiveDB.find();
 
             if (!archive) {
-                return res.status(statusCode.CONFLICT).json({
+                return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.NOT_ORDER
                 });
             }

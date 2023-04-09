@@ -12,15 +12,6 @@ const {PORT_3000} = require("../config/variables");
 module.exports = {
     register: async (req, res, next) => {
         try {
-            const errors = validationResult(req);
-
-            if (!errors.isEmpty()) {
-                return res.status(statusCode.BAD_REQUEST).json({
-                    errors: errors.array(),
-                    message: messageCode.INCORRECT_DATA
-                });
-            }
-
             const createdUser = await UserDB.createUserWithHashPassword(req.body);
 
             if (!createdUser) {
@@ -163,13 +154,21 @@ module.exports = {
 
             if (!email) {
                 return res.status(statusCode.BAD_REQUEST).json({
-                    message: messageCode.INCORRECT_EMAIL
+                    message: messageCode.FILL_FIELDS
                 });
             }
 
             const user = await UserDB.findOne({email});
 
-            deleteFileServise.deleteFile(user.foto);
+            if(!user) {
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.NOT_FOUND
+                });
+            }
+
+            if(user.foto) {
+                deleteFileServise.deleteFile(user.foto);
+            }
 
             await UserDB.deleteOne({email});
 

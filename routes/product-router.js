@@ -16,11 +16,11 @@ router.get(constantsConfig.ARCHIVE_ORDER, orderController.getArchiveOrders);
 
 router.get(constantsConfig.ORDERS, orderController.getAllOrders);
 
-router.patch(constantsConfig.ORDERS, orderController.updateStatusOrder);
+router.delete(constantsConfig.THIS, productController.deleteProduct);
 
 router.delete(constantsConfig.ARCHIVE_ORDER, orderController.deleteArchiveOrders);
 
-router.delete(constantsConfig.THIS, productController.deleteProduct);
+router.patch(constantsConfig.ORDERS, orderController.updateStatusOrder);
 
 router.post(constantsConfig.ARCHIVE_ORDER, orderController.archiveOrder);
 

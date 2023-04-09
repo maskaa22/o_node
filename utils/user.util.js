@@ -1,9 +1,9 @@
-const {PASSWORD} = require("../config/constants");
+const {PASSWORD, PASSWORD_TOO} = require("../config/constants");
 
 module.exports = {
     userNormalizator: (userToNormalize) => {
 
-        const fileldsToRemove = [PASSWORD];
+        const fileldsToRemove = [PASSWORD, PASSWORD_TOO];
 
         fileldsToRemove.forEach((field) => {
             delete userToNormalize[field];

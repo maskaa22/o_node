@@ -42,5 +42,5 @@ module.exports = {
             return null;
         }
     },
-    createActionToken: () => jwt.sign({}, JWT_ACTION_SECRET, {expiresIn: '1d'})
+    createActionToken: () => jwt.sign({}, JWT_ACTION_SECRET, {expiresIn: '30d'})
 };

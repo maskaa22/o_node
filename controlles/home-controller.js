@@ -1,4 +1,4 @@
-const {CalendarDB, TimeDB} = require("../dataBase");
+const {CalendarDB, TimeDB, UserDB} = require("../dataBase");
 const {statusCode, messageCode} = require("../config");
 
 module.exports = {
@@ -34,6 +34,14 @@ module.exports = {
     getCalendarEventForId: async (req, res, next) => {
         try {
             const {user_id} = req.query;
+
+            const user = await UserDB.findById({_id: user_id});
+
+            if(!user){
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.NOT_FOUND
+                });
+            }
 
             const events = await CalendarDB.find({user_id});
 

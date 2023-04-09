@@ -30,7 +30,7 @@ module.exports = {
             });
 
             if (!product) {
-                return res.status(statusCode.BAD_REQUEST).json({
+                return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.CHECK_THE_DATA
                 });
             }
@@ -75,7 +75,9 @@ module.exports = {
                 });
             }
 
-            deleteFileServise.deleteFile(product.img);
+            if(product.img) {
+                deleteFileServise.deleteFile(product.img);
+            }
 
             const products = await ProductDB.deleteOne({inventoryNumber});
 

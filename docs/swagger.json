@@ -1,0 +1,2524 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Olena Studio",
+    "version": "1.0.9",
+    "description": "home project",
+    "contact": {
+      "name": "Maria Skydan",
+      "email": "mariaskydan@gmail.com",
+      "url": "https://github.com/maskaa22?page=1&tab=repositories"
+    }
+  },
+  "parameters": {
+    "page": {
+      "name": "page",
+      "in": "query",
+      "type": "number",
+      "description": "Введіть сторінку продуктів",
+      "default": 2
+    },
+    "limit": {
+      "name": "limit",
+      "in": "query",
+      "type": "number",
+      "description": "Введіть максимальну кількість продуктів на сторінці",
+      "default": 5
+    },
+    "orderIdForArchive": {
+      "name": "_id",
+      "in": "body",
+      "description": "Введіть ідентифікатор замовлення",
+      "schema": {
+        "type": "object",
+        "default": {
+          "_id": "642fb60e36d836ec8d7e6506"
+        }
+      },
+      "required": true
+    },
+    "userFirstDateForRegistration": {
+      "name": "firstDate",
+      "in": "body",
+      "description": "Введіть ім'я, пошту та два рази пароль",
+      "schema": {
+        "type": "object",
+        "default": {
+          "name": "lui",
+          "email": "lui@gmail.com",
+          "password": "123456",
+          "passwordToo": "123456"
+        }
+      },
+      "required": true
+    },
+    "userUpdateDate": {
+      "name": "updateDate",
+      "in": "body",
+      "schema": {
+        "type": "object",
+        "default": {
+          "_id": "64159105f74553185be6c182",
+          "name": "",
+          "surname": "",
+          "email": "",
+          "phone": "0667845588",
+          "oldPassword": "",
+          "number": "",
+          "numberToo": "",
+          "nameSity": "",
+          "nameDepartment": ""
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "logout",
+        "summary": "Вихід з особистого кабінету",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "default": "Bearer",
+            "description": "Після слова Bearer, через пробіл вставте свій access_token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/deleteSchema"
+            }
+          },
+          "401": {
+            "description": "Error: Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaIncorrectData"
+            }
+          }
+        }
+      }
+    },
+    "/auth/activate/:token": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "activateEmail",
+        "summary": "Підтвердження пошти",
+        "description": "Після реєстрації, на пошті буде лист з посиланням, скопіюйте його частину після 'activate/' і до кінця, вставте в поле 'token'.",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Поле для вставки частини посилання"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "default": "User is Active"
+            }
+          },
+          "401": {
+            "description": "Error: Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundUser"
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "refresh",
+        "summary": "Оновлення токена доступу",
+        "description": "Після отримання cookies, перевіряється та оновлюються access та refresh token.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/userSchema"
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaIncorrectData"
+            }
+          },
+          "401": {
+            "description": "Error: Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundUser"
+            }
+          }
+        }
+      }
+    },
+    "/auth": {
+      "delete": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "deleteUser",
+        "summary": "Видалення користувача",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Введіть пошту користувача для видалення"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/deleteUserSchema"
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFound"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundUser"
+            }
+          }
+        }
+      }
+    },
+    "/auth/registration": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "registration",
+        "summary": "Реєстрація користувача.",
+        "description": "Якщо потрібно зареєструвати адміністратора, додайте поле 'role':'admin'",
+        "parameters": [
+          {
+            "$ref": "#/parameters/userFirstDateForRegistration"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "default": {
+                "message": "Користувач створений"
+              }
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorValidatorResultSchema"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFound"
+            }
+          },
+          "409": {
+            "description": "Error: Conflict",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaUnauthorized"
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "logging",
+        "summary": "Авторизація користувача",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "body",
+            "description": "Введіть емеіл та пароль",
+            "schema": {
+              "type": "object",
+              "default": {
+                "email": "lui@gmail.com",
+                "password": "123456"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/userSchema"
+            }
+          },
+          "401": {
+            "description": "Error: Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaUnauthorized"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFound"
+            }
+          }
+        }
+      }
+    },
+    "/auth/email_reset_password": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "resetPasswordIfForgot",
+        "summary": "Запит на зміну пароля",
+        "description": "Відправляє на пошту лист з посиланням, при переході на яке можна ввести новий пароль",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Введіть емеіл",
+            "schema": {
+              "type": "object",
+              "default": {
+                "email": "lui@gmail.com"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/emailAcceptedSchema"
+            }
+          },
+          "401": {
+            "description": "Error: Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaUnauthorized"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFound"
+            }
+          }
+        }
+      }
+    },
+    "/auth/:user_id/reset-password": {
+      "patch": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "resetPassword",
+        "summary": "Новий пароль",
+        "description": "На пошті в листі з відновленням пароля потрібно скопіювати частину між 'http://localhost:3000/:' та '/reset-password' та вставити в поле 'id'",
+        "parameters": [
+          {
+            "name": "resetPassword",
+            "in": "body",
+            "description": "Вставте скопійований текст, введіть два рази новий пароль",
+            "schema": {
+              "type": "object",
+              "default": {
+                "_id": "642be61675e6c78ebc9c2dce",
+                "password": "123456s",
+                "passwordToo": "123456s"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "number",
+              "example": 200
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorValidatorResultSchema"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundUser"
+            }
+          },
+          "409": {
+            "description": "Error: Conflict",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaUnauthorized"
+            }
+          }
+        }
+      }
+    },
+    "/category": {
+      "get": {
+        "tags": [
+          "category"
+        ],
+        "operationId": "getAllCategory",
+        "summary": "Перегляд списку категорій товарів",
+        "responses": {
+          "200": {
+            "description": "ОК",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/categorySchema",
+                "type": "array"
+              }
+            }
+          },
+          "408": {
+            "description": "Error: Request Timeout",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaTryAgainLater"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "category"
+        ],
+        "operationId": "createCategory",
+        "summary": "Створення категорії",
+        "parameters": [
+          {
+            "name": "category_name",
+            "in": "body",
+            "schema": {
+              "type": "string",
+              "default": {
+                "category_name": "Маска"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ОК",
+            "schema": {
+              "$ref": "#/definitions/categorySchema",
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "massage": {
+                  "type": "string",
+                  "example": "Категорія вже існує"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFound"
+            }
+          }
+        }
+      }
+    },
+    "/category/:product_id": {
+      "post": {
+        "tags": [
+          "category"
+        ],
+        "operationId": "filterCategory",
+        "summary": "Список продуктів в залежності від категорії",
+        "parameters": [
+          {
+            "name": "checkCategory",
+            "in": "body",
+            "description": "Введіть '_id' категорії в поле checkCategory",
+            "schema": {
+              "type": "string",
+              "default": {
+                "checkCategory": "63f9e016f049505afa05bc07"
+              }
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/parameters/page"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ОК",
+            "schema": {
+              "$ref": "#/definitions/categorySchemaWithPage"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotCategory"
+            }
+          }
+        }
+      }
+    },
+    "/contact": {
+      "post": {
+        "tags": [
+          "contact"
+        ],
+        "operationId": "contact",
+        "summary": "Написання листа на адресу сайту",
+        "parameters": [
+          {
+            "name": "contact",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "default": {
+                "name": "Луі",
+                "email": "lui@gmail.com",
+                "phone": "0677413458",
+                "text": "Вітаю! Підскажіть чи будуть у Вас якісь акційні товари?"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/emailAcceptedSchema"
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaIncorrectData"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFound"
+            }
+          }
+        }
+      }
+    },
+    "/home/events/:user_id": {
+      "get": {
+        "tags": [
+          "home"
+        ],
+        "operationId": "getCalendarEventForId",
+        "summary": "Перегляд списку записів даного користувача по його id",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "default": "6415b88bf74553185be6c3da",
+            "description": "Ідентифікатор користувача"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/homeSchemaAllEvent"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundUser"
+            }
+          }
+        }
+      }
+    },
+    "/home/find": {
+      "get": {
+        "tags": [
+          "home"
+        ],
+        "operationId": "getFindEvent",
+        "summary": "Список вільного часу для запису у заданий день( формат unix)",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "default": "1678140000",
+            "description": "Дата у форматі unix"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/homeSchemaForFind"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundUser"
+            }
+          }
+        }
+      }
+    },
+    "/home": {
+      "get": {
+        "tags": [
+          "home"
+        ],
+        "operationId": "getAllCalendarEvent",
+        "summary": "Перегляд списку записів на процедури у салон",
+        "parameters": [
+          {
+            "name": "startDateQuery",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "default": "1677650569",
+            "description": "Відмітка початкової дати у форматі unix"
+          },
+          {
+            "name": "endDateQuery",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "default": "1680778969",
+            "description": "Відмітка кінцевої дати у форматі unix"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/homeSchemaAllEvent"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "home"
+        ],
+        "operationId": "createEvent",
+        "summary": "Створення запису на процедуру",
+        "parameters": [
+          {
+            "name": "event",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "default": {
+                "title": "Кевін",
+                "date": "1681989690",
+                "description": "чоловіча стрижка",
+                "time": "08:00",
+                "user_id": "6415b88bf74553185be6c3da"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/homeSchemaAllEvent"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "massage": {
+                  "type": "string",
+                  "example": "Перевірте час та тип роботи"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/create-checkout-session": {
+      "post": {
+        "tags": [
+          "payment"
+        ],
+        "operationId": "payment",
+        "summary": "Оплата покупки черех сервіс 'Stripe'",
+        "description": "Після отримання позитивної відповіді, скопіювавши посилання (останнє поле відповіді - 'url'), перейшовши за цим посиланням, ввести емеіл, прізвище, ім'я та дані тестової карти для перевірки сплати на сайті 'https://dashboard.stripe.com/test/payments'. Дані карти: №-'4242 4242 4242 4242', мм/гг-'12/23' і код cvv-'123'",
+        "parameters": [
+          {
+            "name": "cart",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/paymentSchema"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/paymentSchemaResponse"
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "getAllProducts",
+        "summary": "Перегляд списку продуктів",
+        "parameters": [
+          {
+            "$ref": "#/parameters/page"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/categorySchemaWithPage"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "createProduct",
+        "summary": "Створення продукту",
+        "parameters": [
+          {
+            "name": "product_name",
+            "in": "formData",
+            "type": "string",
+            "description": "Назва товару",
+            "default": "Balsam peptide",
+            "required": true
+          },
+          {
+            "name": "title",
+            "in": "formData",
+            "type": "string",
+            "description": "Короткий опис товару",
+            "default": "Бальзам-пополіскувач з пептидами",
+            "required": true
+          },
+          {
+            "name": "dosage",
+            "in": "formData",
+            "type": "string",
+            "description": "Дозування товару в мл",
+            "default": "200",
+            "required": true
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "type": "string",
+            "description": "Ціна товару за 1 шт.",
+            "default": "150",
+            "required": true
+          },
+          {
+            "name": "inventoryNumber",
+            "in": "formData",
+            "type": "string",
+            "description": "Інвентарний номер товару",
+            "default": "39",
+            "required": true
+          },
+          {
+            "name": "category_id",
+            "in": "formData",
+            "type": "string",
+            "description": "Ідентифікатор категорії в яку відноситься товар",
+            "default": "63fa1ba717474ba5104f9fc5",
+            "required": true
+          },
+          {
+            "name": "img",
+            "in": "formData",
+            "type": "file",
+            "description": "Завантажити фото товару",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/productSchema",
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaInventoryNumberCheck"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaCheckData"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "deleteProduct",
+        "summary": "Видалення продукту",
+        "parameters": [
+          {
+            "name": "inventoryNumber",
+            "in": "query",
+            "type": "string",
+            "description": "Інвентарний номер товару",
+            "default": "39",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/deleteSchema"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaInventoryNumberInvalid"
+            }
+          }
+        }
+      }
+    },
+    "/products/order_analyze": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "getAnalyzeMoneyForMouse",
+        "summary": "Список кількості грошей за продаж товарів отриманих за кожен місяць",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/moneyForMouseAnalyzeSchema"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundData"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "postAnalyzeMoneyForMouse",
+        "summary": "Занесення данних про замовлення для звітності прибутків",
+        "description": "При купівлі товару в цей роутер потрібно заносити дані про місяць та суму даної покупки.",
+        "parameters": [
+          {
+            "name": "secondDate",
+            "in": "body",
+            "description": "Введіть назву місяця ( з малої літери)",
+            "schema": {
+              "type": "object",
+              "default": {
+                "month": "квітень",
+                "summa": 215
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/updateSchema"
+            }
+          },
+          "409": {
+            "description": "Error: Conflict",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundData"
+            }
+          }
+        }
+      }
+    },
+    "/products/:user_id/orders": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "getOrderByIdUser",
+        "summary": "Список замовлень користувача по його id",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Ідентифікатор користувача",
+            "default": "64159028f74553185be6c167"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ordersSchema"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundData"
+            }
+          }
+        }
+      }
+    },
+    "/products/orders_filter": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "getOrderByIdUser",
+        "summary": "Фільтрування списку замовлень статусу його обробки",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Статус",
+            "default": "готово"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ordersSchema"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundData"
+            }
+          }
+        }
+      }
+    },
+    "/products/archive_order": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "getOrderByArchive",
+        "summary": "Список замовлень в архіві",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ordersSchema"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundOrders"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "createOrderByArchive",
+        "summary": "Перенесення виконаного замовлення в архів",
+        "parameters": [
+          {
+            "$ref": "#/parameters/orderIdForArchive"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/deleteSchema"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundOrders"
+            }
+          },
+          "409": {
+            "description": "Error: Conflict",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Помилка перенесення в архів"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "deleteOrderByArchive",
+        "summary": "Видалення замовлення з архіву",
+        "parameters": [
+          {
+            "$ref": "#/parameters/orderIdForArchive"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/deleteSchema"
+            }
+          }
+        }
+      }
+    },
+    "/products/orders": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "getAllOrders",
+        "summary": "Список всіх замовлень",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ordersSchema"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundOrders"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "createOrder",
+        "summary": "Створення замовлення користувачем",
+        "description": "Вводяться дані користувача та продуктів і статус(очікується, прийнято, відправлено, готово) з малої літери",
+        "parameters": [
+          {
+            "name": "createOrder",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "default": {
+                "user_id": "64159105f74553185be6c182",
+                "user_name": "Луі",
+                "surname": "Сальваторе",
+                "phone": "0987793157",
+                "nameSity": "Вінниця",
+                "nameDepartment": "25",
+                "pay": "Готівка",
+                "cart": [
+                  {
+                    "_id": "555df2q5dcf",
+                    "product_name": "Orising Lozione Tonica Caduta",
+                    "title": "Ампули проти випадіння",
+                    "dosage": "10х12",
+                    "price": "256",
+                    "img": "67e0b763-6316-4cc3-b7f4-6298f435f747.jpg",
+                    "category_id": "63fa1be517474ba5104f9fce",
+                    "count": "1",
+                    "totalPrice": "256",
+                    "inventoryNumber": "25",
+                    "createdAt": "2023-12-13T10:23:01.414Z",
+                    "updatedAt": "2023-12-13T10:24:38.892Z",
+                    "__v": 0,
+                    "id": "555df2q5dcf"
+                  }
+                ],
+                "status": "очікується",
+                "summa": "402",
+                "month": "грудень"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ordersSchema"
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFound"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundUser"
+            }
+          },
+          "409": {
+            "description": "Error: Conflict",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Помилка оформлення замовлення"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "updateOrderStatus",
+        "summary": "Зміна статусу оформлення замовлення",
+        "parameters": [
+          {
+            "name": "updateStatus",
+            "in": "body",
+            "description": "Введіть ідентифікатор замовлення і статус(очікується, прийнято, відправлено, готово) з малої літери",
+            "schema": {
+              "type": "object",
+              "default": {
+                "_id": "6432a0c5f46a316e0ead7541",
+                "status": "прийнято"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/updateSchema"
+            }
+          },
+          "409": {
+            "description": "Error: Conflict",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Статус не змінений"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "getAllUsers",
+        "summary": "Перегляд списку зареєстрованих користувачів",
+        "description": "Тільки авторизований адміністратор може отримати список всіх користувачів",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "default": "Bearer",
+            "description": "Після слова Bearer, через пробіл вставте свій access_token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список користувачів",
+            "schema": {
+              "$ref": "#/definitions/userSchema"
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotUser"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFoundUsers"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "updateAllDate",
+        "summary": "Внесення змін в усі дані",
+        "description": "Обов'язкове заповнення поля '_id'. Для зміни пароля введіть старий пароль(oldPassword), та новий два рази(number, numberToo). Для будь яких інших змін, використовується тільки одне поле. Для прикладу змінимо номер телефону на новий.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/userUpdateDate"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Дані збережені",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Дані збережені"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFound"
+            }
+          },
+          "409": {
+            "description": "Error: Conflict",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "Для зміни пароля заповніть поля"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "updateFoto",
+        "summary": "Зміна фотокартки",
+        "description": "Введіть ідентифікатор користувача та завантажте фото.",
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "formData",
+            "type": "string",
+            "default": "64159105f74553185be6c182",
+            "required": true
+          },
+          {
+            "name": "foto",
+            "in": "formData",
+            "type": "file",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Користувач",
+            "schema": {
+              "$ref": "#/definitions/userSchemaForUpdate"
+            }
+          }
+        }
+      }
+    },
+    "/users/find_foto_for_token": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "findIdUser",
+        "summary": "Отримання користувача через його 'token'",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/userSchemaForId"
+            }
+          }
+        }
+      }
+    },
+    "/users/analyze": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "getUserForAnalyze",
+        "summary": "Отримання користувача через його 'token'",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/userForAnalyzeSchema"
+            }
+          }
+        }
+      }
+    },
+    "/users/adress": {
+      "patch": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "updateAdressDate",
+        "summary": "Внесення змін в адресу доставки",
+        "description": "Назва міста - 'nameSity', номер відділення НП - 'nameDepartment'.",
+        "parameters": [
+          {
+            "name": "updateAdressDate",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "default": {
+                "_id": "64159105f74553185be6c182",
+                "nameSity": "Полтава",
+                "nameDepartment": "5"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/userUpdateSchemaAdress"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFound"
+            }
+          }
+        }
+      }
+    },
+    "/users/contact": {
+      "patch": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "updateContactDate",
+        "summary": "Внесення змін в контактні дані",
+        "description": "Ім'я - 'name', прізвище - 'surname', номер телефону - 'phone'. Для прикладу зміненмо номер телефону.",
+        "parameters": [
+          {
+            "name": "updateContactDate",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "default": {
+                "_id": "64159105f74553185be6c182",
+                "name": "",
+                "surname": "",
+                "phone": "0984798345"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/userUpdateSchemaAdress"
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFound"
+            }
+          }
+        }
+      }
+    },
+    "/users/send": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "sendUser",
+        "summary": "Написання листа користувачеві.",
+        "description": "Текст повідомлення - 'text', пошта на яку слати листа - 'email' та його тема - 'topic'.",
+        "parameters": [
+          {
+            "name": "sendUser",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "default": {
+                "text": "Вітаємо. На передодні свят запрошуємо до нас на чарівні зачіски.",
+                "email": "sokolavanila22@gmail.com",
+                "topic": "З найкращими побажаннями"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/emailAcceptedSchema"
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaNotFound"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "errorSchemaIncorrectData": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Некоректні дані"
+        }
+      }
+    },
+    "errorSchemaCheckData": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Перевірте дані"
+        }
+      }
+    },
+    "errorSchemaNotFound": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Заповніть поля"
+        }
+      }
+    },
+    "errorSchemaNotFoundData": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Дані відсутні"
+        }
+      }
+    },
+    "errorSchemaNotFoundOrders": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Не має замовлень"
+        }
+      }
+    },
+    "errorSchemaNotFoundUser": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Користувач відсутній"
+        }
+      }
+    },
+    "errorSchemaNotFoundUsers": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Користувачі відсутні"
+        }
+      }
+    },
+    "errorSchemaNotUser": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Тільки для адміністратора"
+        }
+      }
+    },
+    "errorSchemaUnauthorized": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Не правильний логін чи пароль"
+        }
+      }
+    },
+    "errorSchemaTryAgainLater": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Будь ласка спробуйте пізніше"
+        }
+      }
+    },
+    "errorValidatorResultSchema": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "example": "as2"
+            },
+            "msg": {
+              "type": "string",
+              "example": "Мінімальна довжина пароля 6 символів"
+            },
+            "param": {
+              "type": "string",
+              "example": "password"
+            },
+            "location": {
+              "type": "string",
+              "example": "body"
+            }
+          }
+        },
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Некоректні дані"
+        }
+      }
+    },
+    "errorSchemaNotCategory": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Категорія відсутня"
+        }
+      }
+    },
+    "errorSchemaInventoryNumberCheck": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Інвентарний номер вже використаний"
+        }
+      }
+    },
+    "errorSchemaInventoryNumberInvalid": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Не правильний інвентарний номер"
+        }
+      }
+    },
+    "categorySchema": {
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "Mongo ідентифікатор",
+          "example": "555df2q5dcf"
+        },
+        "category_name": {
+          "type": "string",
+          "description": "Назва категорії",
+          "example": "Маска"
+        },
+        "createdAt": {
+          "description": "Дата створення категорії",
+          "type": "string",
+          "example": "2023-12-13T10:23:01.414Z"
+        },
+        "updatedAt": {
+          "description": "Дата внесення змін",
+          "type": "string",
+          "example": "2023-12-13T10:24:38.892Z"
+        },
+        "__v": {
+          "description": "Версійність в Mongo",
+          "type": "integer",
+          "example": 0
+        },
+        "id": {
+          "type": "string",
+          "example": "555df2q5dcf"
+        }
+      }
+    },
+    "moneyForMouseAnalyzeSchema": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "example": "січень"
+          },
+          "summa": {
+            "type": "number",
+            "example": 903
+          },
+          "id": {
+            "type": "string",
+            "example": null
+          }
+        }
+      }
+    },
+    "userForAnalyzeSchema": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "count": {
+            "type": "number",
+            "example": 1
+          },
+          "month": {
+            "type": "string",
+            "example": "жовтень"
+          },
+          "id": {
+            "type": "string",
+            "example": null
+          }
+        }
+      }
+    },
+
+    "ordersSchema": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "_id": {
+            "description": "Mongo ідентифікатор",
+            "example": "555df2q5dcf"
+          },
+          "user_id": {
+            "description": "Mongo ідентифікатор",
+            "example": "555df2q5dcfsdfe56ygdfb"
+          },
+          "user_name": {
+            "description": "Ім'я користувача",
+            "type": "string",
+            "example": "Луі"
+          },
+          "surname": {
+            "description": "Прізвище користувача",
+            "type": "string",
+            "example": "Сальваторе"
+          },
+          "phone": {
+            "description": "Номер телефону",
+            "type": "string",
+            "example": "0987793157"
+          },
+          "nameSity": {
+            "description": "Місто одержання посилки для Нової пошти",
+            "type": "string",
+            "example": "Вінниця"
+          },
+          "nameDepartment": {
+            "description": "Номер відділення Нової пошти",
+            "type": "string",
+            "example": "25"
+          },
+          "pay": {
+            "description": "Вид сплати (готівка/карта)",
+            "type": "string",
+            "example": "Готівка"
+          },
+          "cart": {
+            "items": {
+              "$ref": "#/definitions/productSchema"
+            }
+          },
+          "status": {
+            "description": "Статус обробки замовлення",
+            "type": "string",
+            "example": "готово"
+          },
+          "summa": {
+            "description": "Сума до сплати замовником",
+            "type": "string",
+            "example": "402"
+          },
+          "month": {
+            "description": "Назва місяця даного замовлення",
+            "type": "string",
+            "example": "грудень"
+          },
+          "createdAt": {
+            "description": "Дата створення користувача",
+            "type": "string",
+            "example": "2023-12-13T10:23:01.414Z"
+          },
+          "updatedAt": {
+            "description": "Дата внесення змін",
+            "type": "string",
+            "example": "2023-12-13T10:24:38.892Z"
+          },
+          "__v": {
+            "description": "Версійність в Mongo",
+            "type": "integer",
+            "example": 0
+          },
+          "id": {
+            "description": "Mongo ідентифікатор",
+            "example": "555df2q5dcf"
+          }
+        }
+      }
+    },
+    "homeSchemaAllEvent": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Mongo ідентифікатор",
+            "example": "555df2q5dcf"
+          },
+          "title": {
+            "type": "string",
+            "description": "Ім'я особи яка записується на процедуру",
+            "example": "Ванда"
+          },
+          "date": {
+            "type": "string",
+            "description": "Дата у форматі unix",
+            "example": "1678140000"
+          },
+          "description": {
+            "type": "string",
+            "description": "Вибраний тип процедури",
+            "example": "жіноча стрижка"
+          },
+          "time": {
+            "type": "string",
+            "description": "Час на який записана людина",
+            "example": "14:00"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "Ідентифікатор даного користувача",
+            "example": "555dfgdfg546df2q5dcf"
+          },
+          "createdAt": {
+            "description": "Дата створення запису",
+            "type": "string",
+            "example": "2023-12-13T10:23:01.414Z"
+          },
+          "updatedAt": {
+            "description": "Дата внесення змін",
+            "type": "string",
+            "example": "2023-12-13T10:24:38.892Z"
+          },
+          "__v": {
+            "description": "Версійність в Mongo",
+            "type": "integer",
+            "example": 0
+          },
+          "id": {
+            "type": "string",
+            "example": "555df2q5dcf"
+          }
+        }
+      }
+    },
+    "homeSchemaForFind": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Mongo ідентифікатор",
+            "example": "555df2q5dcf"
+          },
+          "title": {
+            "type": "string",
+            "description": "Вільний час для запису",
+            "example": "08:00"
+          },
+          "id": {
+            "type": "string",
+            "example": "555df2q5dcf"
+          }
+        }
+      }
+    },
+    "paymentSchema": {
+      "type": "object",
+      "properties": {
+        "cart": {
+          "type": "array",
+          "description": "Список товарів",
+          "$ref": "#/definitions/productSchema"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Ідентифікатор юзера (_id)",
+          "example": "64159028f74553185be6c167"
+        }
+      }
+    },
+    "paymentSchemaResponse": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "cs_test_a10RnIYQJMQI7eiy88pUzUuELjzJ5tInKNSMQ1koq9N6mBcqvIifsLQwvf"
+          },
+          "object": {
+            "type": "string",
+            "example": "checkout.session"
+          },
+          "after_expiration": {
+            "type": "boolean",
+            "example": null
+          },
+          "allow_promotion_codes": {
+            "type": "object",
+            "example": null
+          },
+          "amount_subtotal": {
+            "type": "number",
+            "example": 25600
+          },
+          "amount_total": {
+            "type": "number",
+            "example": 25600
+          },
+          "automatic_tax": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean",
+                "example": false
+              },
+              "status": {
+                "type": "boolean",
+                "example": null
+              }
+            }
+          },
+          "billing_address_collection": {
+            "type": "boolean",
+            "example": null
+          },
+          "cancel_url": {
+            "type": "string",
+            "example": "http://localhost:3000/*"
+          },
+          "client_reference_id": {
+            "type": "object",
+            "example": null
+          },
+          "consent": {
+            "type": "object",
+            "example": null
+          },
+          "consent_collection": {
+            "type": "boolean",
+            "example": null
+          },
+          "created": {
+            "type": "number",
+            "example": 1680852375
+          },
+          "currency": {
+            "type": "string",
+            "example": "uah"
+          },
+          "currency_conversion": {
+            "type": "object",
+            "example": null
+          },
+          "custom_fields": {
+            "type": "object",
+            "example": []
+          },
+          "custom_text": {
+            "type": "object",
+            "properties": {
+              "shipping_address": {
+                "type": "boolean",
+                "example": null
+              },
+              "submit": {
+                "type": "boolean",
+                "example": null
+              }
+            }
+          },
+          "customer": {
+            "type": "object",
+            "example": null
+          },
+          "customer_creation": {
+            "type": "string",
+            "example": "if_required"
+          },
+          "customer_details": {
+            "type": "object",
+            "example": null
+          },
+          "customer_email": {
+            "type": "string",
+            "example": null
+          },
+          "expires_at": {
+            "type": "number",
+            "example": 1680938775
+          },
+          "invoice": {
+            "example": null
+          },
+          "invoice_creation": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "example": false
+              },
+              "invoice_data": {
+                "type": "object",
+                "properties": {
+                  "account_tax_ids": {
+                    "example": null
+                  },
+                  "custom_fields": {
+                    "example": null
+                  },
+                  "description": {
+                    "example": null
+                  },
+                  "footer": {
+                    "example": null
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "example": {}
+                  },
+                  "rendering_options": {
+                    "example": null
+                  }
+                }
+              }
+            }
+          },
+          "livemode": {
+            "example": false
+          },
+          "locale": {
+            "example": null
+          },
+          "mode": {
+            "type": "string",
+            "example": "payment"
+          },
+          "payment_intent": {
+            "example": null
+          },
+          "payment_link": {
+            "example": null
+          },
+          "payment_method_collection": {
+            "type": "string",
+            "example": "always"
+          },
+          "payment_method_options": {
+            "type": "object",
+            "example": {}
+          },
+          "payment_method_types": {
+            "type": "array",
+            "example": [
+              "card"
+            ]
+          },
+          "payment_status": {
+            "type": "string",
+            "example": "unpaid"
+          },
+          "phone_number_collection": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean",
+                "example": false
+              }
+            }
+          },
+          "recovered_from": {
+            "example": null
+          },
+          "setup_intent": {
+            "example": null
+          },
+          "shipping_address_collection": {
+            "example": null
+          },
+          "shipping_cost": {
+            "example": null
+          },
+          "shipping_details": {
+            "example": null
+          },
+          "shipping_options": {
+            "type": "array",
+            "example": []
+          },
+          "status": {
+            "type": "string",
+            "example": "open"
+          },
+          "submit_type": {
+            "example": null
+          },
+          "subscription": {
+            "example": null
+          },
+          "success_url": {
+            "type": "string",
+            "example": "http://localhost:3000/products"
+          },
+          "total_details": {
+            "type": "object",
+            "properties": {
+              "amount_discount": {
+                "type": "number",
+                "example": 0
+              },
+              "amount_shipping": {
+                "type": "number",
+                "example": 0
+              },
+              "amount_tax": {
+                "type": "number",
+                "example": 0
+              }
+            }
+          },
+          "url": {
+            "type": "string",
+            "example": "https://checkout.stripe.com/c/pay/cs_test_a10RnIYQJMQI7eiy88pUzUuELjzJ5tInKNSMQ1koq9N6mBcqvIifsLQwvf#fidkdWxOYHwnPyd1blpxYHZxWjA0SW18X2BJZ0BIcTNpa2x8MHxxTEFKXVxTYm9PTUo8MGJIVlNBM0Ryc2k8Q0QyaUdOQ39xS391SDdGbmNsaWE0UURNaDJEMzcxbGE8dTJLbFdLQWZsNUdvNTUwYEJkMEI0YicpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl"
+          }
+        }
+      }
+    },
+    "categorySchemaWithPage": {
+      "type": "object",
+      "properties": {
+        "docs": {
+          "description": "Список товарів",
+          "$ref": "#/definitions/productsSchema"
+        },
+        "total": {
+          "type": "number",
+          "description": "Загальна кількість товарів по заданій категорії",
+          "example": 12
+        },
+        "limit": {
+          "type": "number",
+          "description": "Максимальна кількість товарів на сторінці",
+          "example": "555df2q5dcf"
+        },
+        "page": {
+          "type": "number",
+          "description": "Номер сторінки",
+          "example": "555df2q5dcf"
+        },
+        "pages": {
+          "type": "number",
+          "description": "Кількість всіх сторінок",
+          "example": "555df2q5dcf"
+        }
+      }
+    },
+    "deleteSchema": {
+      "type": "object",
+      "properties": {
+        "deletedCount": {
+          "type": "number",
+          "description": "Текст повідомлення",
+          "example": 1
+        }
+      }
+    },
+    "updateSchema": {
+      "type": "object",
+      "properties": {
+        "acknowledged": {
+          "type": "boolean",
+          "example": true
+        },
+        "modifiedCount": {
+          "type": "number",
+          "example": 1
+        },
+        "upsertedId": {
+          "example": null
+        },
+        "upsertedCount": {
+          "type": "number",
+          "example": 0
+        },
+        "matchedCount": {
+          "type": "number",
+          "example": 1
+        }
+      }
+    },
+    "deleteUserSchema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Текст повідомлення",
+          "example": "Користувач видалений"
+        }
+      }
+    },
+    "emailAcceptedSchema": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "accepted": {
+            "type": "string",
+            "description": "Емеіл відправника",
+            "example": "<ead91dad-0044-7c4d-444d-61720a56d877@example.com>"
+          },
+          "rejected": {
+            "type": "array",
+            "example": []
+          },
+          "envelopeTime": {
+            "type": "number",
+            "example": 315
+          },
+          "messageTime": {
+            "type": "number",
+            "example": 632
+          },
+          "messageSize": {
+            "type": "number",
+            "example": 575
+          },
+          "response": {
+            "type": "string",
+            "example": "250 2.0.0 OK  1680619585 dn25-20020a05640222f900b004be11e97ca2sm5893504edb.90 - gsmtp"
+          },
+          "envelope": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "description": "Від кого лист",
+                "type": "string",
+                "example": "g@example.com"
+              },
+              "to": {
+                "description": "Кому лист(емеіл)",
+                "type": "string",
+                "example": "lyi@gmail.com"
+              }
+            }
+          },
+          "messageId": {
+            "type": "string",
+            "example": "<ead91dad-0044-7c4d-444d-61720a56d877@example.com>"
+          }
+        }
+      }
+    },
+    "productSchema": {
+      "properties": {
+        "_id": {
+          "description": "Mongo ідентифікатор",
+          "example": "555df2q5dcf"
+        },
+        "product_name": {
+          "description": "Назва товару",
+          "type": "string",
+          "example": "Orising Lozione Tonica Caduta"
+        },
+        "title": {
+          "description": "Короткий опис товару",
+          "type": "string",
+          "example": "Ампули проти випадіння"
+        },
+        "dosage": {
+          "description": "Дозування продукту",
+          "type": "string",
+          "example": "10х12"
+        },
+        "price": {
+          "description": "Ціна 1-ї шт. даного товару",
+          "type": "string",
+          "example": "256"
+        },
+        "img": {
+          "description": "Назва файлу фотокартки",
+          "type": "string",
+          "example": "67e0b763-6316-4cc3-b7f4-6298f435f747.jpg"
+        },
+        "category_id": {
+          "description": "Ідентифікатор категорії",
+          "type": "string",
+          "example": "63fa1be517474ba5104f9fce"
+        },
+        "count": {
+          "description": "Кількість шт. даного товару",
+          "type": "string",
+          "example": "1"
+        },
+        "totalPrice": {
+          "description": "Загальна сума за товар",
+          "type": "string",
+          "example": "256"
+        },
+        "inventoryNumber": {
+          "description": "Номер відділення Нової пошти",
+          "type": "string",
+          "example": "25"
+        },
+        "createdAt": {
+          "description": "Дата створення продукту",
+          "type": "string",
+          "example": "2023-12-13T10:23:01.414Z"
+        },
+        "updatedAt": {
+          "description": "Дата внесення змін",
+          "type": "string",
+          "example": "2023-12-13T10:24:38.892Z"
+        },
+        "__v": {
+          "description": "Версійність в Mongo",
+          "type": "integer",
+          "example": 0
+        },
+        "id": {
+          "description": "Mongo ідентифікатор",
+          "example": "555df2q5dcf"
+        }
+      }
+    },
+    "productsSchema": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/productSchema"
+      }
+    },
+    "userSchemaForUpdate": {
+      "properties": {
+        "_id": {
+          "description": "Mongo ідентифікатор",
+          "example": "555df2q5dcf"
+        },
+        "name": {
+          "description": "Ім'я користувача",
+          "type": "string",
+          "example": "Луі"
+        },
+        "email": {
+          "description": "Емеіл користувача",
+          "type": "string",
+          "example": "sds@example.com"
+        },
+        "role": {
+          "description": "Роль користувача (user/admin)",
+          "type": "string",
+          "example": "user"
+        },
+        "foto": {
+          "description": "Назва фотокартки",
+          "type": "string",
+          "example": "2dcsdvs-16sdfvdd-4b6d-925b-e3sgddfh6d7.jpg"
+        },
+        "is_active": {
+          "description": "Підтвердження емейлу",
+          "type": "boolean",
+          "example": false
+        },
+        "createdAt": {
+          "description": "Дата створення користувача",
+          "type": "string",
+          "example": "2023-12-13T10:23:01.414Z"
+        },
+        "updatedAt": {
+          "description": "Дата внесення змін",
+          "type": "string",
+          "example": "2023-12-13T10:24:38.892Z"
+        },
+        "__v": {
+          "description": "Версійність в Mongo",
+          "type": "integer",
+          "example": 0
+        },
+        "surname": {
+          "description": "Прізвище користувача",
+          "type": "string",
+          "example": "Сальваторе"
+        },
+        "phone": {
+          "description": "Номер телефону",
+          "type": "string",
+          "example": "0987793157"
+        },
+        "nameSity": {
+          "description": "Місто одержання посилки для Нової пошти",
+          "type": "string",
+          "example": "Вінниця"
+        },
+        "nameDepartment": {
+          "description": "Номер відділення Нової пошти",
+          "type": "string",
+          "example": "25"
+        }
+      }
+    },
+    "acessTokenSchema": {
+      "type": "string",
+      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MTU5MTA1Zjc0NsdgdhSGSEGjkk4MDQxODgzNCwiZXhwIjoxNjgwNDE5NzM0fQ.rCvXJn4CfpjWp6lOgB7rk-M02IdHKsXVEdrRr9KupJI"
+    },
+    "refreshTokenSchema": {
+      "type": "string",
+      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MTU5MTA1Zjc0NsdgdhSGSEGjkk4MDQxODgzNCwiZXhwIjoxNjgwNDE5NzM0fQ.rCvXJn4CfpjWp6lOgB7rk-M02IdHKsXVEdrRr9KupJI"
+    },
+    "userSchema": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "user": {
+            "type": "object",
+            "$ref": "#/definitions/userSchemaForUpdate"
+          },
+          "access_token": {
+            "type": "object",
+            "$ref": "#/definitions/acessTokenSchema"
+          },
+          "refresh_token": {
+            "type": "object",
+            "$ref": "#/definitions/refreshTokenSchema"
+          }
+        }
+      }
+    },
+    "userSchemaForId": {
+      "type": "object",
+        "properties": {
+          "_id": {
+            "description": "Mongo ідентифікатор",
+            "example": "555df2q5dcf"
+          },
+          "access_token": {
+            "type": "object",
+            "$ref": "#/definitions/acessTokenSchema"
+          },
+          "refresh_token": {
+            "type": "object",
+            "$ref": "#/definitions/refreshTokenSchema"
+          },
+          "user_id": {
+            "type": "object",
+            "$ref": "#/definitions/userSchemaForUpdate"
+          }
+        }
+    },
+
+    "email": {
+      "type": "string",
+      "example": "lui@gmail.com"
+    },
+    "_id": {
+      "type": "string",
+      "example": "64159105f74553185be6c182"
+    },
+    "name": {
+      "type": "string",
+      "example": "Луі"
+    },
+    "phone": {
+      "type": "string",
+      "example": "0667845588"
+    },
+    "surname": {
+      "type": "string",
+      "example": "Сальваторе"
+    },
+    "nameSity": {
+      "type": "string",
+      "example": "Полтава"
+    },
+    "nameDepartment": {
+      "type": "string",
+      "example": "5"
+    },
+
+
+    "userUpdateSchemaAdress": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "object",
+          "$ref": "#/definitions/email"
+        },
+        "_id": {
+          "type": "object",
+          "$ref": "#/definitions/_id"
+        },
+        "name": {
+          "type": "object",
+          "$ref": "#/definitions/name"
+        },
+        "phone": {
+          "type": "object",
+          "$ref": "#/definitions/phone"
+        },
+        "surname": {
+          "type": "object",
+          "$ref": "#/definitions/surname"
+        },
+        "nameSity": {
+          "type": "object",
+          "$ref": "#/definitions/nameSity"
+        },
+        "nameDepartment": {
+          "type": "object",
+          "$ref": "#/definitions/nameDepartment"
+        }
+      }
+    }
+
+  }
+}

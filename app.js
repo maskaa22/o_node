@@ -4,6 +4,7 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 const path = require('path');
+const swaggerUi = require('swagger-ui-express');
 
 const {
     GET,
@@ -18,9 +19,10 @@ const {
     CATEGORY_,
     CREATE_CHECKOUT_SESSION,
     HOME,
-    CONTACT, STATIC,
+    CONTACT, STATIC, DOCS,
 } = require("./config/constants");
 const {PORT_3000} = require("./config/variables");
+const swaggerJson = require('./docs/swagger.json')
 const {
     userRouter,
     authRouter,
@@ -46,6 +48,7 @@ app.use(express.json({extended: true}));
 app.use(express.static(path.resolve(__dirname, STATIC)));
 app.use(fileUpload({}));
 app.use(cookieParser());
+app.use(DOCS, swaggerUi.serve, swaggerUi.setup(swaggerJson));
 
 app.use(AUTH, authRouter);
 app.use(CATEGORY_, categoryRouter);

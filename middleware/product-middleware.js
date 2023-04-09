@@ -4,7 +4,7 @@ const {statusCode, messageCode} = require("../config");
 module.exports = {
     checkProductDate: async (req, res, next) => {
         try {
-            const {product_name, title, price, category_id, inventoryNumber, dosage} = req.body;
+            const {product_name, title, price, inventoryNumber, dosage} = req.body;
 
             if (product_name === '' || title === '' || price === '' || dosage === '') {
                 return res.status(statusCode.METHOD_NOT_ALLOWED).json({

@@ -18,8 +18,8 @@ module.exports = {
             const userByEmail = await UserDB.findOne({email}).select('+password').lean();
 
             if (!userByEmail) {
-                return res.status(statusCode.NOT_FOUND).json({
-                    message: messageCode.CONFLICT_EMAIL
+                return res.status(statusCode.UNAUTHORIZED).json({
+                    message: messageCode.INCORRECT_PASSWORD
                 });
             }
 
@@ -32,6 +32,16 @@ module.exports = {
     },
     isUserEmailNotPresent: async (req, res, next) => {
         try {
+
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                return res.status(statusCode.BAD_REQUEST).json({
+                    errors: errors.array(),
+                    message: messageCode.INCORRECT_DATA
+                });
+            }
+
             const {email} = req.body;
 
             if (!email) {
@@ -67,7 +77,13 @@ module.exports = {
 
             const {password: hashPassword} = req.user;
 
-            await passwordServise.compare(password, hashPassword);
+            const comparePasword = await passwordServise.compare(password, hashPassword);
+
+            if(!comparePasword) {
+                return res.status(statusCode.UNAUTHORIZED).json({
+                    message: messageCode.INCORRECT_PASSWORD
+                });
+            }
 
             next();
         } catch (e) {
@@ -87,7 +103,7 @@ module.exports = {
             if (!decoder) {
                 return res.status(statusCode.NOT_FOUND).json({message: messageCode.NOT_FOUND});
             }
-
+console.log(decoder);
             req.user = decoder;
             req.token = token;
 
@@ -128,11 +144,11 @@ module.exports = {
 
             const {_id} = req.body;
 
-            const userByEmail = await UserDB.findOne({_id});
+            const userById = await UserDB.findById({_id});
 
-            if (!userByEmail) {
+            if (!userById) {
                 return res.status(statusCode.NOT_FOUND).json({
-                    message: messageCode.CONFLICT_EMAIL
+                    message: messageCode.NOT_FOUND
                 });
             }
 

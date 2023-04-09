@@ -6,7 +6,7 @@ const {homeController} = require('../controlles');
 router.get(constantsConfig.THIS,
     homeController.getCalendarEvent);
 
-router.get(`/events/:user_id`,
+router.get(constantsConfig.EVENTS_FOR_USER_ID,
     homeController.getCalendarEventForId);
 
 router.get(constantsConfig.FIND,
