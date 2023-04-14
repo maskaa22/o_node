@@ -11,6 +11,7 @@ const {
 
 module.exports = {
     generateTokenPair: (id) => {
+
         const access_token = jwt.sign({id}, JWT_ACCESS_SECRET, {expiresIn: '15m'});
         const refresh_token = jwt.sign({id}, JWT_REFRESH_SECRET, {expiresIn: '30d'});
 

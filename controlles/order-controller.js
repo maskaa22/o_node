@@ -141,7 +141,7 @@ module.exports = {
         try {
             const {_id} = req.body;
 
-            if(_id===''){
+            if (_id === '') {
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.NOT_FIND_ORDER
                 });
@@ -158,6 +158,10 @@ module.exports = {
             const archive = await ArchiveDB.create({
                 user_id: order.user_id,
                 user_name: order.user_name,
+                surname: order.surname,
+                phone: order.phone,
+                nameSity: order.nameSity,
+                nameDepartment: order.nameDepartment,
                 cart: order.cart,
                 status: order.status,
                 summa: order.summa

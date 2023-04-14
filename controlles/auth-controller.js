@@ -1,5 +1,3 @@
-const {validationResult} = require("express-validator");
-
 const {ACTION, LOCALES, OPTIONS, RESET_PASSWORD_FOR_LINK, USERS_IS_ACTIVE} = require("../config/constants");
 const {jwtServise, emailServise, passwordServise, deleteFileServise} = require("../servises");
 const {OK} = require("../config/status-code");
@@ -122,7 +120,7 @@ module.exports = {
                 return res.status(statusCode.UNAUTHORIZED).json({message: messageCode.NOT_FOUND});
             }
 
-            const tokenPair = jwtServise.generateTokenPair();
+            const tokenPair = jwtServise.generateTokenPair(tokenRespons.user_id._id);
 
             if (!tokenPair) {
                 return res.status(statusCode.BAD_REQUEST).json({
@@ -160,13 +158,13 @@ module.exports = {
 
             const user = await UserDB.findOne({email});
 
-            if(!user) {
+            if (!user) {
                 return res.status(statusCode.NOT_FOUND).json({
                     message: messageCode.NOT_FOUND
                 });
             }
 
-            if(user.foto) {
+            if (user.foto) {
                 deleteFileServise.deleteFile(user.foto);
             }
 

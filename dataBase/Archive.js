@@ -13,6 +13,22 @@ const orderSchema = new Schema({
         type: String,
         required: true
     },
+    surname: {
+        type: String,
+        trim: true
+    },
+    phone: {
+        type: String,
+        trim: true
+    },
+    nameSity: {
+        type: String,
+        trim: true
+    },
+    nameDepartment: {
+        type: String,
+        trim: true
+    },
     cart: {},
     status: {
         type: String,

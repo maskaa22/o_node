@@ -1608,9 +1608,8 @@
           }
         },
         "message": {
-          "type": "string",
-          "description": "Текст повідомлення",
-          "example": "Некоректні дані"
+          "type": "object",
+          "$ref": "#/definitions/errorSchemaIncorrectData"
         }
       }
     },
@@ -1644,36 +1643,117 @@
         }
       }
     },
+
+    "_id": {
+      "description": "Mongo ідентифікатор",
+      "type": "string",
+      "example": "64159105f74553185be6c182"
+    },
+    "email": {
+      "description": "Емеіл користувача",
+      "type": "string",
+      "example": "lui@gmail.com"
+    },
+    "role": {
+      "description": "Роль користувача (user/admin)",
+      "type": "string",
+      "example": "user"
+    },
+    "name": {
+      "description": "Ім'я користувача",
+      "type": "string",
+      "example": "Луі"
+    },
+    "surname": {
+      "description": "Прізвище користувача",
+      "type": "string",
+      "example": "Сальваторе"
+    },
+    "phone": {
+      "description": "Номер телефону",
+      "type": "string",
+      "example": "0667845588"
+    },
+    "nameSity": {
+      "description": "Місто одержання посилки для Нової пошти",
+      "type": "string",
+      "example": "Полтава"
+    },
+    "nameDepartment": {
+      "description": "Номер відділення Нової пошти",
+      "type": "string",
+      "example": "5"
+    },
+    "foto": {
+      "description": "Назва фотокартки",
+      "type": "string",
+      "example": "2dcsdvs-16sdfvdd-4b6d-925b-e3sgddfh6d7.jpg"
+    },
+    "is_active": {
+      "description": "Підтвердження емейлу",
+      "type": "boolean",
+      "example": false
+    },
+    "createdAt": {
+      "description": "Дата створення",
+      "type": "string",
+      "example": "2023-12-13T10:23:01.414Z"
+    },
+    "updatedAt": {
+      "description": "Дата внесення змін",
+      "type": "string",
+      "example": "2023-12-13T10:24:38.892Z"
+    },
+    "__v": {
+      "description": "Версійність в Mongo",
+      "type": "integer",
+      "example": 0
+    },
+    "category_name": {
+      "type": "string",
+      "description": "Назва категорії",
+      "example": "Маска"
+    },
+    "month": {
+      "type": "string",
+      "example": "січень"
+    },
+    "status": {
+      "description": "Статус обробки замовлення",
+      "type": "string",
+      "example": "готово"
+    },
+    "summa": {
+      "description": "Загальна сума",
+      "type": "string",
+      "example": "402"
+    },
+
     "categorySchema": {
       "properties": {
         "_id": {
-          "type": "string",
-          "description": "Mongo ідентифікатор",
-          "example": "555df2q5dcf"
+          "type": "object",
+          "$ref": "#/definitions/_id"
         },
         "category_name": {
-          "type": "string",
-          "description": "Назва категорії",
-          "example": "Маска"
+          "type": "object",
+          "$ref": "#/definitions/category_name"
         },
         "createdAt": {
-          "description": "Дата створення категорії",
-          "type": "string",
-          "example": "2023-12-13T10:23:01.414Z"
+          "type": "object",
+          "$ref": "#/definitions/createdAt"
         },
         "updatedAt": {
-          "description": "Дата внесення змін",
-          "type": "string",
-          "example": "2023-12-13T10:24:38.892Z"
+          "type": "object",
+          "$ref": "#/definitions/updatedAt"
         },
         "__v": {
-          "description": "Версійність в Mongo",
-          "type": "integer",
-          "example": 0
+          "type": "object",
+          "$ref": "#/definitions/__v"
         },
         "id": {
-          "type": "string",
-          "example": "555df2q5dcf"
+          "type": "object",
+          "$ref": "#/definitions/_id"
         }
       }
     },
@@ -1682,12 +1762,12 @@
       "items": {
         "properties": {
           "month": {
-            "type": "string",
-            "example": "січень"
+            "type": "object",
+            "$ref": "#/definitions/month"
           },
           "summa": {
-            "type": "number",
-            "example": 903
+            "type": "object",
+            "$ref": "#/definitions/summa"
           },
           "id": {
             "type": "string",
@@ -1705,8 +1785,8 @@
             "example": 1
           },
           "month": {
-            "type": "string",
-            "example": "жовтень"
+            "type": "object",
+            "$ref": "#/definitions/month"
           },
           "id": {
             "type": "string",
@@ -1715,43 +1795,37 @@
         }
       }
     },
-
     "ordersSchema": {
       "type": "array",
       "items": {
         "properties": {
           "_id": {
-            "description": "Mongo ідентифікатор",
-            "example": "555df2q5dcf"
+            "type": "object",
+            "$ref": "#/definitions/_id"
           },
           "user_id": {
-            "description": "Mongo ідентифікатор",
-            "example": "555df2q5dcfsdfe56ygdfb"
+            "type": "object",
+            "$ref": "#/definitions/_id"
           },
           "user_name": {
-            "description": "Ім'я користувача",
-            "type": "string",
-            "example": "Луі"
+            "type": "object",
+            "$ref": "#/definitions/name"
           },
           "surname": {
-            "description": "Прізвище користувача",
-            "type": "string",
-            "example": "Сальваторе"
+            "type": "object",
+            "$ref": "#/definitions/surname"
           },
           "phone": {
-            "description": "Номер телефону",
-            "type": "string",
-            "example": "0987793157"
+            "type": "object",
+            "$ref": "#/definitions/phone"
           },
           "nameSity": {
-            "description": "Місто одержання посилки для Нової пошти",
-            "type": "string",
-            "example": "Вінниця"
+            "type": "object",
+            "$ref": "#/definitions/nameSity"
           },
           "nameDepartment": {
-            "description": "Номер відділення Нової пошти",
-            "type": "string",
-            "example": "25"
+            "type": "object",
+            "$ref": "#/definitions/nameDepartment"
           },
           "pay": {
             "description": "Вид сплати (готівка/карта)",
@@ -1764,38 +1838,32 @@
             }
           },
           "status": {
-            "description": "Статус обробки замовлення",
-            "type": "string",
-            "example": "готово"
+            "type": "object",
+            "$ref": "#/definitions/status"
           },
           "summa": {
-            "description": "Сума до сплати замовником",
-            "type": "string",
-            "example": "402"
+            "type": "object",
+            "$ref": "#/definitions/summa"
           },
           "month": {
-            "description": "Назва місяця даного замовлення",
-            "type": "string",
-            "example": "грудень"
+            "type": "object",
+            "$ref": "#/definitions/month"
           },
           "createdAt": {
-            "description": "Дата створення користувача",
-            "type": "string",
-            "example": "2023-12-13T10:23:01.414Z"
+            "type": "object",
+            "$ref": "#/definitions/createdAt"
           },
           "updatedAt": {
-            "description": "Дата внесення змін",
-            "type": "string",
-            "example": "2023-12-13T10:24:38.892Z"
+            "type": "object",
+            "$ref": "#/definitions/updatedAt"
           },
           "__v": {
-            "description": "Версійність в Mongo",
-            "type": "integer",
-            "example": 0
+            "type": "object",
+            "$ref": "#/definitions/__v"
           },
           "id": {
-            "description": "Mongo ідентифікатор",
-            "example": "555df2q5dcf"
+            "type": "object",
+            "$ref": "#/definitions/_id"
           }
         }
       }
@@ -1805,9 +1873,8 @@
       "items": {
         "properties": {
           "_id": {
-            "type": "string",
-            "description": "Mongo ідентифікатор",
-            "example": "555df2q5dcf"
+            "type": "object",
+            "$ref": "#/definitions/_id"
           },
           "title": {
             "type": "string",
@@ -1830,28 +1897,24 @@
             "example": "14:00"
           },
           "user_id": {
-            "type": "string",
-            "description": "Ідентифікатор даного користувача",
-            "example": "555dfgdfg546df2q5dcf"
+            "type": "object",
+            "$ref": "#/definitions/_id"
           },
           "createdAt": {
-            "description": "Дата створення запису",
-            "type": "string",
-            "example": "2023-12-13T10:23:01.414Z"
+            "type": "object",
+            "$ref": "#/definitions/createdAt"
           },
           "updatedAt": {
-            "description": "Дата внесення змін",
-            "type": "string",
-            "example": "2023-12-13T10:24:38.892Z"
+            "type": "object",
+            "$ref": "#/definitions/updatedAt"
           },
           "__v": {
-            "description": "Версійність в Mongo",
-            "type": "integer",
-            "example": 0
+            "type": "object",
+            "$ref": "#/definitions/__v"
           },
           "id": {
-            "type": "string",
-            "example": "555df2q5dcf"
+            "type": "object",
+            "$ref": "#/definitions/_id"
           }
         }
       }
@@ -1861,9 +1924,8 @@
       "items": {
         "properties": {
           "_id": {
-            "type": "string",
-            "description": "Mongo ідентифікатор",
-            "example": "555df2q5dcf"
+            "type": "object",
+            "$ref": "#/definitions/_id"
           },
           "title": {
             "type": "string",
@@ -1871,8 +1933,8 @@
             "example": "08:00"
           },
           "id": {
-            "type": "string",
-            "example": "555df2q5dcf"
+            "type": "object",
+            "$ref": "#/definitions/_id"
           }
         }
       }
@@ -1886,9 +1948,8 @@
           "$ref": "#/definitions/productSchema"
         },
         "userId": {
-          "type": "string",
-          "description": "Ідентифікатор юзера (_id)",
-          "example": "64159028f74553185be6c167"
+          "type": "object",
+          "$ref": "#/definitions/_id"
         }
       }
     },
@@ -1897,8 +1958,8 @@
       "items": {
         "properties": {
           "id": {
-            "type": "string",
-            "example": "cs_test_a10RnIYQJMQI7eiy88pUzUuELjzJ5tInKNSMQ1koq9N6mBcqvIifsLQwvf"
+            "type": "object",
+            "$ref": "#/definitions/_id"
           },
           "object": {
             "type": "string",
@@ -2217,7 +2278,7 @@
           "accepted": {
             "type": "string",
             "description": "Емеіл відправника",
-            "example": "<ead91dad-0044-7c4d-444d-61720a56d877@example.com>"
+            "example": "<61720a56d877@example.com>"
           },
           "rejected": {
             "type": "array",
@@ -2264,8 +2325,8 @@
     "productSchema": {
       "properties": {
         "_id": {
-          "description": "Mongo ідентифікатор",
-          "example": "555df2q5dcf"
+          "type": "object",
+          "$ref": "#/definitions/_id"
         },
         "product_name": {
           "description": "Назва товару",
@@ -2313,23 +2374,20 @@
           "example": "25"
         },
         "createdAt": {
-          "description": "Дата створення продукту",
-          "type": "string",
-          "example": "2023-12-13T10:23:01.414Z"
+          "type": "object",
+          "$ref": "#/definitions/createdAt"
         },
         "updatedAt": {
-          "description": "Дата внесення змін",
-          "type": "string",
-          "example": "2023-12-13T10:24:38.892Z"
+          "type": "object",
+          "$ref": "#/definitions/updatedAt"
         },
         "__v": {
-          "description": "Версійність в Mongo",
-          "type": "integer",
-          "example": 0
+          "type": "object",
+          "$ref": "#/definitions/__v"
         },
         "id": {
-          "description": "Mongo ідентифікатор",
-          "example": "555df2q5dcf"
+          "type": "object",
+          "$ref": "#/definitions/id"
         }
       }
     },
@@ -2342,68 +2400,56 @@
     "userSchemaForUpdate": {
       "properties": {
         "_id": {
-          "description": "Mongo ідентифікатор",
-          "example": "555df2q5dcf"
+          "type": "object",
+          "$ref": "#/definitions/_id"
         },
         "name": {
-          "description": "Ім'я користувача",
-          "type": "string",
-          "example": "Луі"
+          "type": "object",
+          "$ref": "#/definitions/name"
         },
         "email": {
-          "description": "Емеіл користувача",
-          "type": "string",
-          "example": "sds@example.com"
+          "type": "object",
+          "$ref": "#/definitions/email"
         },
         "role": {
-          "description": "Роль користувача (user/admin)",
-          "type": "string",
-          "example": "user"
+          "type": "object",
+          "$ref": "#/definitions/role"
         },
         "foto": {
-          "description": "Назва фотокартки",
-          "type": "string",
-          "example": "2dcsdvs-16sdfvdd-4b6d-925b-e3sgddfh6d7.jpg"
+          "type": "object",
+          "$ref": "#/definitions/foto"
         },
         "is_active": {
-          "description": "Підтвердження емейлу",
-          "type": "boolean",
-          "example": false
+          "type": "object",
+          "$ref": "#/definitions/is_active"
         },
         "createdAt": {
-          "description": "Дата створення користувача",
-          "type": "string",
-          "example": "2023-12-13T10:23:01.414Z"
+          "type": "object",
+          "$ref": "#/definitions/createdAt"
         },
         "updatedAt": {
-          "description": "Дата внесення змін",
-          "type": "string",
-          "example": "2023-12-13T10:24:38.892Z"
+          "type": "object",
+          "$ref": "#/definitions/updatedAt"
         },
         "__v": {
-          "description": "Версійність в Mongo",
-          "type": "integer",
-          "example": 0
+          "type": "object",
+          "$ref": "#/definitions/__v"
         },
         "surname": {
-          "description": "Прізвище користувача",
-          "type": "string",
-          "example": "Сальваторе"
+          "type": "object",
+          "$ref": "#/definitions/surname"
         },
         "phone": {
-          "description": "Номер телефону",
-          "type": "string",
-          "example": "0987793157"
+          "type": "object",
+          "$ref": "#/definitions/phone"
         },
         "nameSity": {
-          "description": "Місто одержання посилки для Нової пошти",
-          "type": "string",
-          "example": "Вінниця"
+          "type": "object",
+          "$ref": "#/definitions/nameSity"
         },
         "nameDepartment": {
-          "description": "Номер відділення Нової пошти",
-          "type": "string",
-          "example": "25"
+          "type": "object",
+          "$ref": "#/definitions/nameDepartment"
         }
       }
     },
@@ -2438,8 +2484,8 @@
       "type": "object",
         "properties": {
           "_id": {
-            "description": "Mongo ідентифікатор",
-            "example": "555df2q5dcf"
+            "type": "object",
+            "$ref": "#/definitions/_id"
           },
           "access_token": {
             "type": "object",
@@ -2455,37 +2501,6 @@
           }
         }
     },
-
-    "email": {
-      "type": "string",
-      "example": "lui@gmail.com"
-    },
-    "_id": {
-      "type": "string",
-      "example": "64159105f74553185be6c182"
-    },
-    "name": {
-      "type": "string",
-      "example": "Луі"
-    },
-    "phone": {
-      "type": "string",
-      "example": "0667845588"
-    },
-    "surname": {
-      "type": "string",
-      "example": "Сальваторе"
-    },
-    "nameSity": {
-      "type": "string",
-      "example": "Полтава"
-    },
-    "nameDepartment": {
-      "type": "string",
-      "example": "5"
-    },
-
-
     "userUpdateSchemaAdress": {
       "type": "object",
       "properties": {
@@ -2519,6 +2534,5 @@
         }
       }
     }
-
   }
 }

@@ -103,7 +103,7 @@ module.exports = {
             if (!decoder) {
                 return res.status(statusCode.NOT_FOUND).json({message: messageCode.NOT_FOUND});
             }
-console.log(decoder);
+
             req.user = decoder;
             req.token = token;
 
