@@ -1,4 +1,4 @@
-const {passwordServise, jwtServise} = require("../servises");
+const {passwordService, jwtService} = require("../servises");
 const {statusCode, messageCode, tokenTypeEnum} = require("../config");
 const {UserDB, OAuth, ActionDB} = require("../dataBase");
 const {validationResult} = require("express-validator");
@@ -38,7 +38,7 @@ module.exports = {
             if (!errors.isEmpty()) {
                 return res.status(statusCode.BAD_REQUEST).json({
                     errors: errors.array(),
-                    message: messageCode.INCORRECT_DATA
+                    message: messageCode.MINIMUM_LENGTH_PASSWORD
                 });
             }
 
@@ -77,7 +77,7 @@ module.exports = {
 
             const {password: hashPassword} = req.user;
 
-            const comparePasword = await passwordServise.compare(password, hashPassword);
+            const comparePasword = await passwordService.compare(password, hashPassword);
 
             if(!comparePasword) {
                 return res.status(statusCode.UNAUTHORIZED).json({
@@ -98,7 +98,7 @@ module.exports = {
                 return res.status(statusCode.UNAUTHORIZED).json({message: messageCode.NOT_FOUND});
             }
 
-            const decoder = await jwtServise.verifyToken(token);
+            const decoder = await jwtService.verifyToken(token);
 
             if (!decoder) {
                 return res.status(statusCode.NOT_FOUND).json({message: messageCode.NOT_FOUND});
@@ -176,7 +176,7 @@ module.exports = {
         try {
             const {token} = req.query;
 
-            await jwtServise.verifyToken(token, tokenTypeEnum.ACTION);
+            await jwtService.verifyToken(token, tokenTypeEnum.ACTION);
 
             const {user_id: user, _id} = await ActionDB.findOne({
                 token,

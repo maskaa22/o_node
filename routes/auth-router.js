@@ -25,9 +25,12 @@ router.post(constantsConfig.LOGIN,
     authMiddleware.isUserPasswordPresent,
     authController.login);
 
+router.post(constantsConfig.SEND_ACTIVE_EMAIL,
+    authController.sendActiveEmail);
+
 router.post(constantsConfig.REGISTRATION,
     check(constantsConfig.EMAIL, messageCode.INCORRECT_EMAIL).isEmail(),
-    check(constantsConfig.PASSWORD, messageCode.MINIMUM_LENGTH_PASSWORD).isLength({min: 6}),
+    check(constantsConfig.PASSWORD, messageCode.MINIMUM_LENGTH_PASSWORD).isLength({min: 4}),
     authMiddleware.isUserEmailNotPresent,
     authMiddleware.checkPasswordForDublicate,
     authController.register);

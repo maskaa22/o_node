@@ -1,14 +1,14 @@
 const uuid = require("uuid");
 const path = require("path");
 
-const {emailServise, deleteFileServise} = require("../servises");
-const passwordServise = require("../servises/password-servise");
+const {emailService, deleteFileService} = require("../servises");
+const passwordService = require("../servises/password-servise");
 const {STATIC, JPG, SELECT} = require("../config/constants");
 const {statusCode, messageCode, constantsConfig} = require("../config");
 const {USER} = require("../config/user-roles-enum");
 const {UserDB, OAuth, UserAnalyzeDB} = require('../dataBase');
 const UserDto = require("../utils/UserDto");
-const {userNormalizator, userNormalizatorForAuth} = require("../utils/user.util");
+const {userNormalizator} = require("../utils/user.util");
 
 module.exports = {
     getAllUsers: async (req, res, next) => {
@@ -39,7 +39,7 @@ module.exports = {
             if (oldPassword !== '' && number !== '' && numberToo !== '') {
                 const user = await UserDB.findById({_id});
 
-                const password = await passwordServise.compare(oldPassword, user.password);
+                const password = await passwordService.compare(oldPassword, user.password);
 
                 if (!password) {
                     return res.status(statusCode.CONFLICT).json({
@@ -47,7 +47,7 @@ module.exports = {
                     });
                 }
                 if (number === numberToo) {
-                    const hashedPassword = await passwordServise.hash(number);
+                    const hashedPassword = await passwordService.hash(number);
 
                     await UserDB.updateOne({_id}, {password: hashedPassword});
                 } else return res.status(statusCode.CONFLICT).json({
@@ -98,7 +98,7 @@ module.exports = {
                 });
             }
 
-            const send = await emailServise.sendMail(email, text, topic);
+            const send = await emailService.sendMail(email, text, topic);
 
             res.json(send);
         } catch (e) {
@@ -117,7 +117,7 @@ module.exports = {
             const userFoto = await UserDB.findById({_id});
 
             if(userFoto.foto) {
-                deleteFileServise.deleteFile(userFoto.foto);
+                deleteFileService.deleteFile(userFoto.foto);
             }
 
             await UserDB.updateOne({_id}, {foto: fileName});

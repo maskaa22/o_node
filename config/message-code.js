@@ -14,7 +14,7 @@ module.exports = {
     INCORRECT_PASSWORD: 'Не правильний логін чи пароль',
     INVALID_INVENTORY_NUMBER: 'Не правильний інвентарний номер',
     INVENTORY_NUMBER_IS_ALREADY_USED: 'Інвентарний номер вже використаний',
-    MINIMUM_LENGTH_PASSWORD: 'Мінімальна довжина пароля 6 символів',
+    MINIMUM_LENGTH_PASSWORD: 'Мінімальна довжина пароля 4 символи',
     NOT_CATEGORY: 'Категорія відсутня',
     NOT_CREATE_ORDER: 'Помилка оформлення замовлення',
     NOT_CREATE_ORDER_IN_ARCHIVE: 'Помилка перенесення в архів',

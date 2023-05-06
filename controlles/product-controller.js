@@ -4,7 +4,7 @@ const uuid = require("uuid");
 const {ProductDB} = require("../dataBase");
 const {STATIC, JPG} = require("../config/constants");
 const {statusCode, messageCode} = require("../config");
-const {deleteFileServise} = require("../servises");
+const {deleteFileService} = require("../servises");
 
 module.exports = {
     createProduct: async (req, res, next) => {
@@ -76,7 +76,7 @@ module.exports = {
             }
 
             if(product.img) {
-                deleteFileServise.deleteFile(product.img);
+                deleteFileService.deleteFile(product.img);
             }
 
             const products = await ProductDB.deleteOne({inventoryNumber});

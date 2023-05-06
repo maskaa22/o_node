@@ -45,7 +45,9 @@ module.exports = {
                 });
             }
 
-            res.json(orders);
+            const order = await OrderDB.findById({_id});
+
+            res.json(order);
         } catch (e) {
             next(e);
         }

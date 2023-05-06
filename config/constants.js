@@ -50,6 +50,7 @@ module.exports = {
     RESET_PASSWORD_FOR_LINK: 'reset-password',
     SELECT: '-createdAt -updatedAt -__v -id -_id',
     SEND: '/send',
+    SEND_ACTIVE_EMAIL: '/send-active-email',
     STATIC: 'static',
     STRIPE: 'stripe',
     THIS: '/',

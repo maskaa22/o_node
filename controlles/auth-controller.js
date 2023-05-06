@@ -1,5 +1,5 @@
 const {ACTION, LOCALES, OPTIONS, RESET_PASSWORD_FOR_LINK, USERS_IS_ACTIVE} = require("../config/constants");
-const {jwtServise, emailServise, passwordServise, deleteFileServise} = require("../servises");
+const {jwtService, emailService, passwordService, deleteFileService} = require("../servises");
 const {OK} = require("../config/status-code");
 const {REFRESH} = require("../config/token-type.enum");
 const {statusCode, messageCode, constantsConfig} = require("../config");
@@ -18,11 +18,11 @@ module.exports = {
                 });
             }
 
-            const token = jwtServise.createActionToken();
+            const token = jwtService.createActionToken();
 
             await ActionDB.create({token, type: ACTION, user_id: createdUser._id});
 
-            await emailServise.emailForRegistration(createdUser.email, createdUser.name, token);
+            await emailService.emailForRegistration(createdUser.email, createdUser.name, token);
 
             const month = new Date().toLocaleString(LOCALES, {month: OPTIONS});
 
@@ -53,7 +53,7 @@ module.exports = {
         try {
             const {user} = req;
 
-            const tokenPair = jwtServise.generateTokenPair(user._id);
+            const tokenPair = jwtService.generateTokenPair(user._id);
 
             if (!tokenPair) {
                 return res.status(statusCode.BAD_REQUEST).json({
@@ -77,6 +77,19 @@ module.exports = {
                 user: userToReturn,
                 ...tokenPair
             });
+        } catch (e) {
+            next(e);
+        }
+    },
+    sendActiveEmail: async (req, res, next) => {
+        try {
+            const {_id, name, email} = req.body;
+
+            const tokenForActive = await ActionDB.findOne({user_id: _id});
+
+            await emailService.emailForRegistration(email, name, tokenForActive.token);
+
+            res.json('OK');
         } catch (e) {
             next(e);
         }
@@ -110,7 +123,7 @@ module.exports = {
                 return res.status(statusCode.UNAUTHORIZED).json({message: messageCode.NOT_FOUND});
             }
 
-            const decoder = await jwtServise.verifyToken(refresh_token, REFRESH);
+            const decoder = await jwtService.verifyToken(refresh_token, REFRESH);
 
             const tokenRespons = await OAuth.findOne({refresh_token: refresh_token}).populate(constantsConfig.USER_ID);
 
@@ -120,7 +133,7 @@ module.exports = {
                 return res.status(statusCode.UNAUTHORIZED).json({message: messageCode.NOT_FOUND});
             }
 
-            const tokenPair = jwtServise.generateTokenPair(tokenRespons.user_id._id);
+            const tokenPair = jwtService.generateTokenPair(tokenRespons.user_id._id);
 
             if (!tokenPair) {
                 return res.status(statusCode.BAD_REQUEST).json({
@@ -165,14 +178,12 @@ module.exports = {
             }
 
             if (user.foto) {
-                deleteFileServise.deleteFile(user.foto);
+                deleteFileService.deleteFile(user.foto);
             }
 
-            await UserDB.deleteOne({email});
+             const del = await UserDB.deleteOne({email});
 
-            return res.status(statusCode.OK).json({
-                message: messageCode.DELETE_USER
-            });
+            res.json(del);
         } catch (e) {
             next(e);
         }
@@ -186,7 +197,7 @@ module.exports = {
             const user_id = user._id.toString();
             const link = `${PORT_3000}/:${user_id}/${RESET_PASSWORD_FOR_LINK}`;
 
-            const send = await emailServise.sendMailForResetPassword(email, name, link);
+            const send = await emailService.sendMailForResetPassword(email, name, link);
 
             res.json(send);
         } catch (e) {
@@ -198,7 +209,7 @@ module.exports = {
             const {password, passwordToo, _id} = req.body;
 
             if (password === passwordToo) {
-                const hashedPassword = await passwordServise.hash(password);
+                const hashedPassword = await passwordService.hash(password);
 
                 await UserDB.updateOne({_id}, {password: hashedPassword});
             }
