@@ -18,8 +18,8 @@ module.exports = {
             const userByEmail = await UserDB.findOne({email}).select('+password').lean();
 
             if (!userByEmail) {
-                return res.status(statusCode.UNAUTHORIZED).json({
-                    message: messageCode.INCORRECT_PASSWORD
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.INCORRECT_EMAIL
                 });
             }
 
