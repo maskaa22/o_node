@@ -32,7 +32,7 @@ router.post(constantsConfig.ORDERS,
     orderController.createOrder);
 
 router.post(constantsConfig.THIS,
-    productMiddleware.checkProductDate,
+     productMiddleware.checkProductDate,
     productController.createProduct);
 
 module.exports = router;

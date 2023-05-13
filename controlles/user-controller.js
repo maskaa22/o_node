@@ -48,8 +48,9 @@ module.exports = {
                 }
                 if (number === numberToo) {
                     const hashedPassword = await passwordService.hash(number);
+                    const hashedPasswordToo = await passwordService.hash(numberToo);
 
-                    await UserDB.updateOne({_id}, {password: hashedPassword});
+                    await UserDB.updateOne({_id}, {password: hashedPassword, passwordToo: hashedPasswordToo});
                 } else return res.status(statusCode.CONFLICT).json({
                     message: messageCode.INCORRECT_PASSWORD
                 });

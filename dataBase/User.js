@@ -59,8 +59,9 @@ const userSchema = new Schema({
 userSchema.statics = {
     async createUserWithHashPassword(userObject) {
         const hashedPassword = await passwordServise.hash(userObject.password);
+        const hashedPasswordToo = await passwordServise.hash(userObject.passwordToo);
 
-        return this.create({...userObject, password: hashedPassword});
+        return this.create({...userObject, password: hashedPassword, passwordToo: hashedPasswordToo});
     },
     async updateUserWithHashPassword(userObject, newUser) {
         const hashedPassword = await passwordServise.hash(newUser.password);

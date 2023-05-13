@@ -210,8 +210,10 @@ module.exports = {
 
             if (password === passwordToo) {
                 const hashedPassword = await passwordService.hash(password);
+                 const hashedPasswordToo = await passwordService.hash(passwordToo);
 
-                await UserDB.updateOne({_id}, {password: hashedPassword});
+                 await UserDB.updateOne({_id}, {password: hashedPassword, passwordToo: hashedPasswordToo});
+                //await UserDB.updateOne({_id}, {password: hashedPassword});
             }
 
             res.json(OK);

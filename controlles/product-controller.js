@@ -9,9 +9,10 @@ const {deleteFileService} = require("../servises");
 module.exports = {
     createProduct: async (req, res, next) => {
         try {
+
             const {product_name, title, price, category_id, inventoryNumber, dosage} = req.body;
 
-            const {img} = req.files;
+             const {img} = req.files;
 
             let fileName = uuid.v4() + JPG;
             const pathFile = path.resolve(__dirname, '..', STATIC, fileName);

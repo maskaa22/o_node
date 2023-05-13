@@ -13,7 +13,7 @@ module.exports = {
     },
     userNormalizatorForAuth: (userToNormalize) => {
 
-        const fileldsToRemove = [PASSWORD];
+        const fileldsToRemove = [PASSWORD, PASSWORD_TOO];
 
         if (userToNormalize) {
 
