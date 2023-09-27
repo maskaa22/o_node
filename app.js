@@ -59,8 +59,13 @@ app.use(PRODUCTS, productRouter);
 app.use(USERS, userRouter);
 
 async function start() {
-    app.listen(PORT, () => {
-        console.log(messageCode.RUNNING, PORT);
-    });    
+    try {
+        app.listen(PORT, () => {
+            console.log(messageCode.RUNNING, PORT);
+        });  
+    }
+    catch {
+        console.log('Sorry!!!')
+    }
 }
 start();
