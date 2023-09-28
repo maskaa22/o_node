@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
-    "server": "nodemon app.js"
+    "server": "nodemon app.js",
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "Mariia Skydan <skydanmaria@gmail.com>",
