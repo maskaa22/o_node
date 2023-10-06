@@ -67,7 +67,7 @@ module.exports = {
                 ...tokenPair,
                 user_id: user._id
             });
-console.log({...tokenPair})
+
             res.cookie(constantsConfig.REFRESH_TOKEN, tokenPair.refresh_token, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
                 httpOnly: true
