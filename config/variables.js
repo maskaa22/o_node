@@ -1,8 +1,8 @@
 require('dotenv').config();
 
 module.exports = {
-    ACTIVATE_TOKEN_URL: 'https://o-react-269776kc4-maskaa22s-projects.vercel.app/auth/activate/',
-    CANCEL_URL: 'https://o-react-269776kc4-maskaa22s-projects.vercel.app/*',
+    ACTIVATE_TOKEN_URL: 'https://o-react.vercel.app/auth/activate/',
+    CANCEL_URL: 'https://o-react.vercel.app/*',
 
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || 'secret_world',
     JWT_ACTION_SECRET: process.env.JWT_ACTION_SECRET || 'action_world',
@@ -15,8 +15,8 @@ module.exports = {
     NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD,
 
     PORT: process.env.PORT || 5000,
-    PORT_3000: 'https://o-react-269776kc4-maskaa22s-projects.vercel.app',
+    PORT_3000: 'https://o-react.vercel.app',
 
     SECRET_KEY_STRIPE: process.env.SECRET_KEY_STRIPE,
-    SUCCESS_URL: 'https://o-react-269776kc4-maskaa22s-projects.vercel.app/products',
+    SUCCESS_URL: 'https://o-react.vercel.app/products',
 };
