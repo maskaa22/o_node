@@ -72,6 +72,10 @@ module.exports = {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
                 httpOnly: true
             });
+            console.log({
+                user: userToReturn,
+                ...tokenPair
+            });
 
             return res.json({
                 user: userToReturn,
