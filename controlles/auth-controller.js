@@ -70,7 +70,8 @@ module.exports = {
 
             res.cookie(constantsConfig.REFRESH_TOKEN, tokenPair.refresh_token, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
-                httpOnly: true
+                httpOnly: true,
+                domain: '.o-react.vercel.app'
             });
             
 
