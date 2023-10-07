@@ -138,6 +138,7 @@ module.exports = {
             console.log('111111111');
 
             const user = await OAuth.findOne({refresh_token: refresh_token}).populate(constantsConfig.USER_ID);
+            console.log(user);
 
             res.json(user);
         } catch (e) {
