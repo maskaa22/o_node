@@ -133,6 +133,9 @@ module.exports = {
     findIdUser: async (req, res, next) => {
         try {
             const {refresh_token} = req.cookies;
+            console.log('111111111');
+            console.log(refresh_token);
+            console.log('111111111');
 
             const user = await OAuth.findOne({refresh_token: refresh_token}).populate(constantsConfig.USER_ID);
 
