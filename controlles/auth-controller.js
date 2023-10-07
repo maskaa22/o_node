@@ -71,7 +71,8 @@ module.exports = {
             res.cookie(constantsConfig.REFRESH_TOKEN, tokenPair.refresh_token, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
                 httpOnly: true,
-                domain: '.o-node.onrender.com'
+                domain: '.o-node.onrender.com',
+                sameSite: 'none'
             });
             
 
