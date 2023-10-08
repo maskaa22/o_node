@@ -123,7 +123,7 @@ module.exports = {
         try {
             
             const {refresh_token} = req.cookies;
-
+console.log(refresh_token);
             if (!refresh_token) {
                 return res.status(statusCode.UNAUTHORIZED).json({message: messageCode.NOT_FOUND});
             }
