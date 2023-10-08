@@ -121,7 +121,7 @@ module.exports = {
     },
     refresh: async (req, res, next) => {
         try {
-            console.log('REFRESH');
+            
             const {refresh_token} = req.cookies;
 
             if (!refresh_token) {
@@ -131,7 +131,7 @@ module.exports = {
             const decoder = await jwtService.verifyToken(refresh_token, REFRESH);
 
             const tokenRespons = await OAuth.findOne({refresh_token: refresh_token}).populate(constantsConfig.USER_ID);
-
+            console.log(tokenRespons);
             const userToReturn = userNormalizatorForAuth(tokenRespons);
 
             if (!decoder || !tokenRespons) {
