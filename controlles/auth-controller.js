@@ -156,7 +156,10 @@ console.log(refresh_token, "REFRESH");
 
             res.cookie(constantsConfig.REFRESH_TOKEN, tokenPair.refresh_token, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
-                httpOnly: true
+                httpOnly: true,
+                domain: '.o-node.onrender.com',
+                sameSite: 'none',
+                secure: true
             });
 
             res.json({tokenPair, user});
