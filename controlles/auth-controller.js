@@ -75,7 +75,7 @@ module.exports = {
                 sameSite: 'none',
                 secure: true
             });
-            console.log(tokenPair.refresh_token, 'LOGIN');
+            
 
             return res.json({
                 user: userToReturn,
@@ -123,7 +123,7 @@ module.exports = {
         try {
             
             const {refresh_token} = req.cookies;
-console.log(refresh_token, "REFRESH");
+
             if (!refresh_token) {
                 return res.status(statusCode.UNAUTHORIZED).json({message: messageCode.NOT_FOUND});
             }
@@ -131,7 +131,7 @@ console.log(refresh_token, "REFRESH");
             const decoder = await jwtService.verifyToken(refresh_token, REFRESH);
 
             const tokenRespons = await OAuth.findOne({refresh_token: refresh_token}).populate(constantsConfig.USER_ID);
-            console.log(tokenRespons, "USER after refresh");
+            
             const userToReturn = userNormalizatorForAuth(tokenRespons);
 
             if (!decoder || !tokenRespons) {
