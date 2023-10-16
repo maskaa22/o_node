@@ -20,7 +20,7 @@ const sendMail = (userMail, text, subject) => transporter.sendMail({
 });
 
 const sendMailForUs = (name, email, phone, text) => transporter.sendMail({
-    from: email,
+    from: `${name}, <${email}>`,
     to: NO_REPLY_EMAIL,
     subject: `Привіт, мене звати - ${name}`,
     html: `<p>Мій телефон: ${phone}.</p>` +
