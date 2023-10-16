@@ -5,6 +5,7 @@ module.exports = {
     sendEmail: async (req, res, next) => {
         try {
             const {name, email, phone, text} = req.body;
+            console.log(name, email, phone, text)
 
             if (!name || !email || !phone || !text) {
                 return res.status(statusCode.NOT_FOUND).json({message: messageCode.EMPTY_FIELDS});
