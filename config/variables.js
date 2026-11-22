@@ -16,6 +16,7 @@ module.exports = {
 
     PORT: process.env.PORT || 5000,
     PORT_3000: 'https://o-react.vercel.app',
+    CORS_ORIGINS: ['https://o-react.vercel.app', 'http://localhost:3000'],
 
     SECRET_KEY_STRIPE: process.env.SECRET_KEY_STRIPE,
     SUCCESS_URL: 'https://o-react.vercel.app/products',

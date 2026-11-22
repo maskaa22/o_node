@@ -21,7 +21,7 @@ const {
     HOME,
     CONTACT, STATIC, DOCS,
 } = require("./config/constants");
-const {PORT_3000} = require("./config/variables");
+const {CORS_ORIGINS} = require("./config/variables");
 const swaggerJson = require('./docs/swagger.json')
 const {
     userRouter,
@@ -41,7 +41,7 @@ mongoose.connect(MONGO_CONNECT_URL);
 const app = express();
 
 app.use(cors({
-    credentials: true, origin: PORT_3000, methods: [GET, POST, DELETE, UPDATE, PUT, PATCH],
+    credentials: true, origin: CORS_ORIGINS, methods: [GET, POST, DELETE, UPDATE, PUT, PATCH],
 }));
 
 app.use(express.json({extended: true}));
