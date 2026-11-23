@@ -9,4 +9,6 @@ router.post(constantsConfig.THIS, categoryController.createCategory);
 
 router.post(constantsConfig.PRODUCT_ID, categoryController.filtreCategory);
 
+router.delete(constantsConfig.PRODUCT_ID, categoryController.deleteCategory);
+
 module.exports = router;

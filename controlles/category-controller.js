@@ -44,6 +44,40 @@ module.exports = {
             next(e);
         }
     },
+    deleteCategory: async (req, res, next) => {
+        try {
+            const {product_id} = req.params;
+
+            if (!mongoose.Types.ObjectId.isValid(product_id)) {
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.NOT_CATEGORY
+                });
+            }
+
+            const category = await CategoryDB.findById(product_id);
+
+            if (!category) {
+                return res.status(statusCode.NOT_FOUND).json({
+                    message: messageCode.NOT_CATEGORY
+                });
+            }
+
+            // категорію з товарами не видаляємо, щоб товари не лишилися без категорії
+            const productsCount = await ProductDB.countDocuments({category_id: category._id});
+
+            if (productsCount > 0) {
+                return res.status(statusCode.CONFLICT).json({
+                    message: messageCode.CATEGORY_HAS_PRODUCTS
+                });
+            }
+
+            await CategoryDB.deleteOne({_id: category._id});
+
+            res.json(category);
+        } catch (e) {
+            next(e);
+        }
+    },
     filtreCategory: async (req, res, next) => {
         try {
             const filter = req.body;

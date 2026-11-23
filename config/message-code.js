@@ -1,5 +1,6 @@
 module.exports = {
     CATEGORY_ALREADY_EXISTS: 'Категорія вже існує',
+    CATEGORY_HAS_PRODUCTS: 'Категорію не можна видалити: у ній є товари. Спочатку видаліть їх',
     CHANGE_PASSWORD: 'Для зміни пароля заповніть поля',
     CHECK_THE_DATA: 'Перевірте дані',
     CONFLICT_EMAIL: 'Така пошта не зареєстрована',
