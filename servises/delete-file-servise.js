@@ -7,6 +7,12 @@ module.exports = {
     deleteFile(fileName) {
         const pathFile = path.resolve(__dirname, '..', STATIC, fileName);
 
-        fs.unlinkSync(pathFile);
+        try {
+            fs.unlinkSync(pathFile);
+        } catch (e) {
+            if (e.code !== 'ENOENT') {
+                throw e;
+            }
+        }
     }
 };
